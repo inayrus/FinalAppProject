@@ -23,6 +23,7 @@ These are the features I would like to implement:
 
 ### Sketches
 These sketches don't yet include views of a photo being taken or chosen to convert. The converted note activity does show what it would look like after the photo has been turned to text. 
+
 ![converted note activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/converted_note.png)
 ![overview activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/overview_activity_three_FAB.png)
 ![new note activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/new_note.png)
