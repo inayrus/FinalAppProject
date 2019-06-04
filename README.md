@@ -13,7 +13,7 @@ People usually write things down to remember it at a later time. This could be a
 To solve the problem of having to type the notes to make them digital, this app includes a feature that turns handwritten notes into digital texts with a photo.
 
 ### Features
-These are the features I would like to implement:
+These are the main features I would like to implement:
 1. let people create new notes:
     - can type a note as normal
     - can take a photo or upload a photo of text to convert to digital text
@@ -21,14 +21,22 @@ These are the features I would like to implement:
 3. organize files in folders by adding tags
 4. exporting files (email, whatsapp, google drive, ect.)
 
+#### Optional Features
+* Option to change layout colours
+* A Searchbar
+* A date of creation and of modification on the note
+
 ### Sketches
-These sketches don't yet include views of a photo being taken or chosen to convert. The converted note activity does show what it would look like after the photo has been turned to text. 
+These sketches don't yet include views of a photo being taken or chosen to convert. The converted note activity does show what it would look like after the photo has been turned to text.
 ![converted note activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/converted_note.png)
 ![overview activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/overview_activity_three_FAB.png)
 ![new note activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/new_note.png)
 ![folder activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/folder_activity.png)
 ![detail activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/detail_activity.png)
 
-## External Components
-* SQLite
-* Microsoft Computer Vision API
+### Prerequisites
+* External components needed to implement certain features:
+  * SQLite to save the notes.
+  * Microsoft Computer Vision API to convert photos to text.
+* I looked into the FairNote as a similar app, and I like the way they use tags instead of folders, and how it's possible to change the colour layout of the app. They do show quite a big part of the note itself in the listview, which is useful when the notes are short, but not really for long texts.
+* I think the hardest parts of implementing this application will be figuring out how the Microsoft API works. At this moment I think it could also be a challenge to save and seperate the user's notes from the app settings (labels, colour layout preferences).
