@@ -24,15 +24,17 @@ These are the main features I would like to implement:
 #### Optional Features
 * Option to change layout colours
 * A Searchbar
+* Add tags in options
 * A date of creation and of modification on the note
 
 ### Sketches
 These sketches don't yet include views of a photo being taken or chosen to convert. The converted note activity does show what it would look like after the photo has been turned to text.
-![converted note activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/converted_note.png)
 ![overview activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/overview_activity_three_FAB.png)
-![new note activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/new_note.png)
-![folder activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/folder_activity.png)
-![detail activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/detail_activity.png)
+![new note activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/Note_View_Empty.png)
+
+![options](https://github.com/inayrus/FinalAppProject/blob/master/doc/options_view.png)
+![tag activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/tag_activity.png)
+![filled note activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/Note_View_Filled.png)
 
 ### Prerequisites
 * External components needed to implement certain features:
