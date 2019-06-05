@@ -16,20 +16,25 @@ To solve the problem of having to type the notes to make them digital, this app 
 These are the main features I would like to implement:
 1. let people create new notes:
     - can type a note as normal
-    - can take a photo or upload a photo of text to convert to digital text
-2. possible to format the text: bold, highlights, text sizes.
-3. organize files in folders by adding tags
-4. exporting files (email, whatsapp, google drive, ect.)
+    - can upload a photo of text to convert to digital text
+2. possible to edit the note: bold, highlights, text sizes.
+3. delete a note
+4. add tags to a note
+5. sort the notes by tag in the overview
 
 #### Optional Features
-* Option to change layout colours
-* A Searchbar
-* Add tags in options
+* Camera feature to retrieve make photos of notes
+* A searchbar
+* The sidebar
+* Add tags in sidebar
+* Change layout colours in sidebar
 * A date of creation and of modification on the note
 
 ### Sketches
 These sketches don't yet include views of a photo being taken or chosen to convert. The converted note activity does show what it would look like after the photo has been turned to text.
+
 ![overview activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/overview_activity_options.png)
+![select photo view](https://github.com/inayrus/FinalAppProject/blob/master/doc/select_photo.png)
 ![new note activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/Note_View_Empty.png)
 
 ![options](https://github.com/inayrus/FinalAppProject/blob/master/doc/options_view.png)
