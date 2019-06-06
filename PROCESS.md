@@ -27,4 +27,8 @@ Today was the first stand-up. I asked how they would handle the add tag function
 I also worked on the "utility modules, classes and functions" part of the design doc and added a new sketch. This select photo activity is added to the readme and incorporated in a new design doc sketch. I think I now only have to look into how to get the keyboard format options (bolding, underline, highlight) and how to remember how edited text is formatted, and then I can start on coding the prototype.
 
 ![diagrams](https://github.com/inayrus/FinalAppProject/blob/master/doc/UML.png)
-![new design doc sketch](https://github.com/inayrus/FinalAppProject/blob/master/doc/design_doc_plus_select.png)
+
+## Day 4
+The goal of the stand up today was to make a list of things we need t research to make our app working. My list consisted of figuring out how to implement the keyboard formatting options, how to save the formatted text, and figuring out how the microsoft API works. My original idea on how to save a formatted word was to bracket this words with HTML tags (<b> bolding </b>), in combination with the fromHTML function. During the stand-up, I got a suggestion from Maarten to look into ascii (Whatsapp's use of * for bolding, _ for italics). Pjotr suggested that I could also use the text attribute in android studio to format the text. I think I will go with whatever option also allows for highlighting in different colours.
+
+Today I mainly worked on putting together basic layouts and making sure they're connected with buttons and listeners. The listviews in the layout aren't working yet.

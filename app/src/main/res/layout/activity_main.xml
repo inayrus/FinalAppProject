@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ListView
+        android:id="@+id/notesList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabWrite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/pen_pict"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/colorAccent"
+        android:clickable="true"
+        android:onClick="selectPhotoClicked"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginBottom="80dp"
+        android:src="@drawable/gallery_pict"
+        android:tint="?attr/colorBackgroundFloating"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_anchor="@id/fabWrite"
+        app:layout_anchorGravity="top"
+        android:clickable="true"
+        android:onClick="newNoteClicked"/>
+</android.support.design.widget.CoordinatorLayout>
