@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">FinalAppProject</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_tag">Add tags</string>
+    <string name="action_share">Share</string>
+    <string name="action_search">Search</string>
 </resources>

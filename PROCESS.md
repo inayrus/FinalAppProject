@@ -32,3 +32,9 @@ I also worked on the "utility modules, classes and functions" part of the design
 The goal of the stand up today was to make a list of things we need t research to make our app working. My list consisted of figuring out how to implement the keyboard formatting options, how to save the formatted text, and figuring out how the microsoft API works. My original idea on how to save a formatted word was to bracket this words with HTML tags (<b> bolding </b>), in combination with the fromHTML function. During the stand-up, I got a suggestion from Maarten to look into ascii (Whatsapp's use of * for bolding, _ for italics). Pjotr suggested that I could also use the text attribute in android studio to format the text. I think I will go with whatever option also allows for highlighting in different colours.
 
 Today I mainly worked on putting together basic layouts and making sure they're connected with buttons and listeners. The listviews in the layout aren't working yet.
+
+## Day 5
+Stand up feedback on the layout: filling in your own title sounds useful, could add the creation date/time and the first sentence to the listView of notes.
+I've mainly been working on adding a toolbar to the app that supports back navigation and clicking icons.
+
+I believe my prototype right now is okay. It has all the screens, a rough layout of the elements I want in it, and the screens are also connected to each other. Some other layout/connection elements that are still missing: a listener for the listview in main, action provider (pop up) for the label icon in NoteActivity, and a sidebar. 

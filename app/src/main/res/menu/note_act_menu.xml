@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".NoteActivity">
+
+    <!-- "Delete", should always appear as action button -->
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/baseline_delete_black_18dp"
+        android:title="@string/action_delete"
+        app:showAsAction="ifRoom"/>
+
+    <!-- Add Tags, should always appear as action button -->
+    <item android:id="@+id/action_tags"
+        android:icon="@drawable/baseline_label_black_18dp"
+        android:title="@string/action_tag"
+        app:showAsAction="ifRoom"/>
+
+    <!-- "Share", appear as action button if possible-->
+    <item android:id="@+id/action_share"
+        android:title="@string/action_share"
+        app:showAsAction="ifRoom"
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"/>
+
+    <!--&lt;!&ndash; "Search", appear as action button if possible&ndash;&gt;-->
+    <!--<item android:id="@+id/action_search"-->
+        <!--android:icon="@drawable/baseline_search_black_18dp"-->
+        <!--android:title="@string/action_search"-->
+        <!--app:showAsAction="ifRoom"/>-->
+
+</menu>
