@@ -1,15 +1,34 @@
 package com.example.finalappproject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class Note {
+public class Note implements Serializable {
 
     // attributes
     private int id;
     private String title;
     private String content;
-    private ArrayList<String> tags;
+    private ArrayList<String> arrayTags;
+    private String stringTags;
     private int timestamp;
+
+    // convert the string with tags to an array
+    public ArrayList<String> getUpdatedArrayTags(String stringTags) {
+        this.arrayTags = (ArrayList<String>) Arrays.asList(stringTags.split(","));
+        return arrayTags;
+    }
+
+    // convert the tags array to a string, seperated with commas
+    public String getUpdatedStringTags() {
+        this.stringTags = this.arrayTags.toString();
+
+        stringTags = stringTags.replace("[", "")
+                .replace("]", "")
+                .replace(" ", "");
+        return stringTags;
+    }
 
     // setters
     public void setId(int id) {
@@ -24,8 +43,12 @@ public class Note {
         this.content = content;
     }
 
-    public void setTags(ArrayList<String> tags) {
-        this.tags = tags;
+    public void setStringTags(String stringTags) {
+        this.stringTags = stringTags;
+    }
+
+    public void setArrayTags(ArrayList<String> arrayTags) {
+        this.arrayTags = arrayTags;
     }
 
     public void setTimestamp(int timestamp) {
@@ -45,8 +68,12 @@ public class Note {
         return content;
     }
 
-    public ArrayList<String> getTags() {
-        return tags;
+    public ArrayList<String> getArrayTags() {
+        return arrayTags;
+    }
+
+    public String getStringTags() {
+        return stringTags;
     }
 
     public int getTimestamp() {

@@ -8,14 +8,31 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class NoteActivity extends AppCompatActivity implements ConvertRequest.Callback {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
+
+        // get the note from the intent
+        Intent intent = getIntent();
+        Note note = (Note) intent.getSerializableExtra("Note");
+
+        // unpack note if note is being edited (not newly made)
+        if (note != null) {
+            TextView titleView = findViewById(R.id.editTitle);
+            titleView.setText(String.valueOf(note.getTitle()));
+
+            TextView contentView = findViewById(R.id.editContent);
+            contentView.setText(String.valueOf(note.getContent()));
+            System.out.println(note.getContent());
+
+            // GOTDAMN TAGS
+        }
 
         // set the toolbar
         Toolbar toolbar = findViewById(R.id.noteActToolbar);
@@ -85,11 +102,29 @@ public class NoteActivity extends AppCompatActivity implements ConvertRequest.Ca
     {
         super.onBackPressed();
 
-        // save the note in database
+        // save the note in database unless the fields are empty
+        Note note = getNoteFromView();
 
+        if (!note.getContent().equals("") || !note.getTitle().equals("")) {
+            NoteDatabase db = NoteDatabase.getInstance(getApplicationContext());
+            db.insert(note);
+        }
 
         // send the user to the start screen
-        startActivity(new Intent(NoteActivity.this, MainActivity.class));
         finish();
+    }
+
+    private Note getNoteFromView() {
+        TextView titleView = findViewById(R.id.editTitle);
+        TextView contentView = findViewById(R.id.editContent);
+
+        // HOW TO RETRIEVE THE TAGS??
+
+        Note note = new Note();
+        note.setTitle(titleView.getText().toString());
+        note.setContent(contentView.getText().toString());
+        // PUT TAGS
+
+        return note;
     }
 }
