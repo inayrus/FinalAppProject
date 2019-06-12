@@ -61,5 +61,6 @@ New things:
 * Delete button in toolbar is working, provides an alert dialogue.
 * Select photo activity sends user to gallery.
 * Created a styleguide during the stand-up.
+* RecyclerView implemented, but the tags aren't shown in horizontal line. If there are two tags, only the first one is shown and the second disappears. I should start with this tomorrow.
 
 I've also been debating whether the back buttons in the NoteActivity should save the note as well, or if they should act as a cancel button (what they do now).

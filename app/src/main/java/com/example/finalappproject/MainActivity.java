@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,7 +16,7 @@ import android.widget.ListView;
 public class MainActivity extends AppCompatActivity {
 
     private NoteDatabase db;
-    private NoteAdapter adapter;
+    private NoteAdapter notesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,17 +32,15 @@ public class MainActivity extends AppCompatActivity {
         // select all notes from the database & set the NoteAdapter
         this.db = NoteDatabase.getInstance(getApplicationContext());
         Cursor cursor = db.selectAll();
-        this.adapter = new NoteAdapter(getApplicationContext(), cursor);
+        this.notesAdapter = new NoteAdapter(this, cursor);
 
         // set the adapter to the list
         ListView notesList = findViewById(R.id.notesList);
-        notesList.setAdapter(adapter);
+        notesList.setAdapter(notesAdapter);
 
         // set an list item listener
         ListItemClickListener listListener = new ListItemClickListener();
         notesList.setOnItemClickListener(listListener);
-
-        // make indiv note list layout
     }
 
     // when the user returns to this activity
@@ -106,6 +106,6 @@ public class MainActivity extends AppCompatActivity {
         Cursor newCursor = db.selectAll();
 
         // replace the cursor in the adapter
-        adapter.swapCursor(newCursor);
+        notesAdapter.swapCursor(newCursor);
     }
 }

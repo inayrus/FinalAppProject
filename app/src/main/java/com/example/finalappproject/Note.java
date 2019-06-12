@@ -16,7 +16,7 @@ public class Note implements Serializable {
 
     // convert the string with tags to an array
     public ArrayList<String> getUpdatedArrayTags(String stringTags) {
-        this.arrayTags = (ArrayList<String>) Arrays.asList(stringTags.split(","));
+        this.arrayTags = new ArrayList<>(Arrays.asList(stringTags.split(",")));
         return arrayTags;
     }
 
