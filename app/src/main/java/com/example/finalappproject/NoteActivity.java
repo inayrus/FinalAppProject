@@ -1,35 +1,44 @@
 package com.example.finalappproject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class NoteActivity extends AppCompatActivity implements ConvertRequest.Callback {
+
+    // attributes
+    private Note retrievedNote;
+    private NoteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
 
+        // save the database
+        this.db = NoteDatabase.getInstance(getApplicationContext());
+
         // get the note from the intent
         Intent intent = getIntent();
-        Note note = (Note) intent.getSerializableExtra("Note");
+        this.retrievedNote = (Note) intent.getSerializableExtra("Note");
 
         // unpack note if note is being edited (not newly made)
-        if (note != null) {
+        if (retrievedNote != null) {
             TextView titleView = findViewById(R.id.editTitle);
-            titleView.setText(String.valueOf(note.getTitle()));
+            titleView.setText(String.valueOf(retrievedNote.getTitle()));
 
             TextView contentView = findViewById(R.id.editContent);
-            contentView.setText(String.valueOf(note.getContent()));
-            System.out.println(note.getContent());
+            contentView.setText(String.valueOf(retrievedNote.getContent()));
 
             // GOTDAMN TAGS
         }
@@ -54,14 +63,88 @@ public class NoteActivity extends AppCompatActivity implements ConvertRequest.Ca
         return true;
     }
 
+    // horizontal scroll view for the tags
+        // needs an adapter
+
+    // save note
+    public void doneClicked(View v) {
+
+        Note editedNote = getNoteFromView();
+
+        // check if either title field or content field is filled
+        if (!editedNote.getContent().equals("") || !editedNote.getTitle().equals("")) {
+            NoteDatabase db = NoteDatabase.getInstance(getApplicationContext());
+
+            // check if note is new or being edited
+            if (retrievedNote == null) {
+                // new: insert
+                db.insert(editedNote);
+            } else {
+                // edited: update
+                db.update(editedNote.getId(), editedNote);
+            }
+        }
+
+        // send the user to the start screen
+        finish();
+    }
+
+    // got the note from the microsoft API
+    @Override
+    public void gotNote(Note note) {
+
+    }
+
+    @Override
+    public void gotNoteError(String message) {
+
+    }
+
+    // return to previous screen
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+
+        // send the user to the start screen
+        finish();
+    }
+
+    // turn the screentext into a Note
+    private Note getNoteFromView() {
+        TextView titleView = findViewById(R.id.editTitle);
+        TextView contentView = findViewById(R.id.editContent);
+
+        // HOW TO RETRIEVE THE TAGS??
+
+        Note note;
+
+        // if note is new
+        if (retrievedNote == null) {
+            note = new Note();
+        }
+        // if note is edited
+        else {
+            note = retrievedNote;
+        }
+
+        note.setTitle(titleView.getText().toString());
+        note.setContent(contentView.getText().toString());
+
+        // PUT TAGS
+
+        return note;
+    }
+
     // react to toolbar actions clicks
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete:
                 // return a pop up, asking if they're sure, then delete the note from the database
+                AlertDialog alert = alertBuild().create();
+                alert.show();
 
-                Toast.makeText(this, "Delete click", Toast.LENGTH_LONG).show();
                 return true;
 
             case R.id.action_tags:
@@ -82,49 +165,30 @@ public class NoteActivity extends AppCompatActivity implements ConvertRequest.Ca
         }
     }
 
+    // build the pop up for delete confirmation
+    private AlertDialog.Builder alertBuild() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Sure you want to delete this note?");
+        builder.setCancelable(true);
 
-    // horizontal scroll view for the tags
-        // needs an adapter
+        builder.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // call the database delete function
+                        db.delete(retrievedNote.getId());
+                        finish();
+                    }
+                });
 
+        builder.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
 
-    @Override
-    public void gotNote(Note note) {
-
-    }
-
-    @Override
-    public void gotNoteError(String message) {
-
-    }
-
-    @Override
-    public void onBackPressed()
-    {
-        super.onBackPressed();
-
-        // save the note in database unless the fields are empty
-        Note note = getNoteFromView();
-
-        if (!note.getContent().equals("") || !note.getTitle().equals("")) {
-            NoteDatabase db = NoteDatabase.getInstance(getApplicationContext());
-            db.insert(note);
-        }
-
-        // send the user to the start screen
-        finish();
-    }
-
-    private Note getNoteFromView() {
-        TextView titleView = findViewById(R.id.editTitle);
-        TextView contentView = findViewById(R.id.editContent);
-
-        // HOW TO RETRIEVE THE TAGS??
-
-        Note note = new Note();
-        note.setTitle(titleView.getText().toString());
-        note.setContent(contentView.getText().toString());
-        // PUT TAGS
-
-        return note;
+        return builder;
     }
 }

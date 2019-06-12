@@ -13,6 +13,9 @@ import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private NoteDatabase db;
+    private NoteAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,9 +28,9 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(Color.WHITE);
 
         // select all notes from the database & set the NoteAdapter
-        NoteDatabase db = NoteDatabase.getInstance(getApplicationContext());
+        this.db = NoteDatabase.getInstance(getApplicationContext());
         Cursor cursor = db.selectAll();
-        NoteAdapter adapter = new NoteAdapter(getApplicationContext(), cursor);
+        this.adapter = new NoteAdapter(getApplicationContext(), cursor);
 
         // set the adapter to the list
         ListView notesList = findViewById(R.id.notesList);
@@ -38,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
         notesList.setOnItemClickListener(listListener);
 
         // make indiv note list layout
+    }
+
+    // when the user returns to this activity
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateData();
     }
 
     // if a note in the list is clicked
@@ -56,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
             int titleIndex = cursor.getColumnIndex("Title");
             String title = cursor.getString(titleIndex);
             note.setTitle(title);
-            System.out.println(note.getTitle());
 
             int contentIndex = cursor.getColumnIndex("Content");
             String content = cursor.getString(contentIndex);
@@ -84,12 +93,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     // select photo fab is clicked
     public void selectPhotoClicked(View v) {
 
         // send user to SelectActivity
         Intent intent = new Intent(MainActivity.this, SelectActivity.class);
         startActivity(intent);
+    }
+
+    private void updateData() {
+        // get all the updated data from the database
+        Cursor newCursor = db.selectAll();
+
+        // replace the cursor in the adapter
+        adapter.swapCursor(newCursor);
     }
 }

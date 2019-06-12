@@ -53,3 +53,13 @@ Pinksteren, I haven't been programming.
 * Looked into how to create a horizontal listview, but it says I might need to do that with a recycle view
 
 Tomorrow I want to implement the database update method and create a horizontal listview for the tags.
+
+#### Day 3
+New things:
+* Implemented the update note method.
+* Added the Done button in the NoteActivity.
+* Delete button in toolbar is working, provides an alert dialogue.
+* Select photo activity sends user to gallery.
+* Created a styleguide during the stand-up.
+
+I've also been debating whether the back buttons in the NoteActivity should save the note as well, or if they should act as a cancel button (what they do now).
