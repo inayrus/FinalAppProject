@@ -58,8 +58,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            System.out.println("click!");
-
             // send the user to the noteactivity
             Intent intent = new Intent(MainActivity.this, NoteActivity.class);
             Note note = new Note();

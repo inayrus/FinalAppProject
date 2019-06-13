@@ -61,9 +61,18 @@ New things:
 * Delete button in toolbar is working, provides an alert dialogue.
 * Select photo activity sends user to gallery.
 * Created a styleguide during the stand-up.
-* RecyclerView implemented, but the tags aren't shown in horizontal line. If there are two tags, only the first one is shown and the second disappears. I should start with this tomorrow.
+* RecyclerView implemented as recommended by Renske, but the tags aren't shown in horizontal line. If there are two tags, only the first one is shown and the second disappears. I should start with this tomorrow.
 
 I've also been debating whether the back buttons in the NoteActivity should save the note as well, or if they should act as a cancel button (what they do now).
 
 #### Day 4
-* Fixed the problem with the tags. They're now nested in MainActivity's ListView and displayed in a horizontal line. However, the onClick of the ListView is now broken. 
+I've mainly been working on getting the tags in MainActivity to work:
+* Fixed the problem with the tags. They're now nested in MainActivity's ListView and displayed in a horizontal line. However, the onClick of the ListView is now broken.
+* Natasja suggested that a listview can't be nested, so I tried to programatically add buttons to the listview. I later changed the buttons to a textview because I liked the look better.
+* Now the tags are displayed in a horizontal line and the ListView item is still clickable.
+* The tags themselves are also clickable, but clicking seems to be a bit difficult.
+
+Three things before the alpha version is complete:
+* Linking the API to the SelectActivity so a photo can be converted to digital text.
+* Adding a tag to a note in NoteActivity.
+* Sorting on a tag in MainActivity.
