@@ -64,3 +64,6 @@ New things:
 * RecyclerView implemented, but the tags aren't shown in horizontal line. If there are two tags, only the first one is shown and the second disappears. I should start with this tomorrow.
 
 I've also been debating whether the back buttons in the NoteActivity should save the note as well, or if they should act as a cancel button (what they do now).
+
+#### Day 4
+* Fixed the problem with the tags. They're now nested in MainActivity's ListView and displayed in a horizontal line. However, the onClick of the ListView is now broken. 

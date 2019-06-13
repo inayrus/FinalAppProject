@@ -12,18 +12,16 @@ import java.util.ArrayList;
 public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
 
     private ArrayList<String> tags;
-    private LayoutInflater inflater;
 
     // the constructor
     public TagsAdapter(Context context, ArrayList<String> tags) {
-        this.inflater = LayoutInflater.from(context);
         this.tags = tags;
     }
 
     // inflates the item layout
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
-        View view = inflater.inflate(R.layout.recyclerview_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -35,6 +33,11 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
     }
 
     @Override
+    public void onViewRecycled(ViewHolder viewHolder) {
+        super.onViewRecycled(viewHolder);
+    }
+
+    @Override
     public int getItemCount() {
         return tags.size();
     }
@@ -42,6 +45,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tagView;
 
+        // constructor
         ViewHolder(View itemView) {
             super(itemView);
             tagView = itemView.findViewById(R.id.tagItem);

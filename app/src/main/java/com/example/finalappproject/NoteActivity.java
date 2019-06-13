@@ -141,10 +141,17 @@ public class NoteActivity extends AppCompatActivity implements ConvertRequest.Ca
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete:
-                // return a pop up, asking if they're sure, then delete the note from the database
-                AlertDialog alert = alertBuild().create();
-                alert.show();
 
+                // check if the note is new or being edited
+                if (retrievedNote != null) {
+                    // return a pop up, asking if they're sure, then delete the note from the database
+                    AlertDialog alert = alertBuild().create();
+                    alert.show();
+                }
+                else {
+                    // close activity
+                    finish();
+                }
                 return true;
 
             case R.id.action_tags:

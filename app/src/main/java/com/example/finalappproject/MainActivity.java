@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         // set an list item listener
         ListItemClickListener listListener = new ListItemClickListener();
         notesList.setOnItemClickListener(listListener);
+
+        // tags adapter is set in the NoteAdapter Classs
     }
 
     // when the user returns to this activity
@@ -55,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            System.out.println("click!");
 
             // send the user to the noteactivity
             Intent intent = new Intent(MainActivity.this, NoteActivity.class);

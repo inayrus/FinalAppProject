@@ -24,7 +24,7 @@ public class NoteAdapter extends ResourceCursorAdapter {
 
         // get the layout elements
         TextView titleView = view.findViewById(R.id.mainTitle);
-        RecyclerView recyclerView = view.findViewById(R.id.mainTags);
+//        RecyclerView recyclerView = view.findViewById(R.id.mainTags);
 
         // get the value of the title
         int titleIndex = cursor.getColumnIndex("Title");
@@ -37,22 +37,26 @@ public class NoteAdapter extends ResourceCursorAdapter {
         int tagsIndex = cursor.getColumnIndex("Tags");
         String stringTags = cursor.getString(tagsIndex);
 
-        // if the note has tags
-        if (stringTags != null) {
-
-            // convert the string with tags to an ArrayList<String>
-            Note note = new Note();
-            ArrayList<String> arrayTags = note.getUpdatedArrayTags(stringTags);
-            System.out.println(arrayTags);
-
-            // set an adapter for the tags
-            LinearLayoutManager horizontalLLM =
-                    new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,
-                            false);
-            recyclerView.setLayoutManager(horizontalLLM);
-            TagsAdapter tagsAdapter = new TagsAdapter(context, arrayTags);
-            recyclerView.setAdapter(tagsAdapter);
-        }
+//        // set tags if the note has them
+//        if (stringTags != null) {
+//
+//            // convert the string with tags to an ArrayList<String>
+//            Note note = new Note();
+//            ArrayList<String> arrayTags = note.getUpdatedArrayTags(stringTags);
+//            System.out.println(arrayTags);
+//
+//            // set an adapter for the tags
+//            LinearLayoutManager horizontalLLM =
+//                    new org.solovyev.android.views.llm.LinearLayoutManager(context,
+//                            LinearLayoutManager.HORIZONTAL, false);
+//
+//            recyclerView.setLayoutManager(horizontalLLM);
+//            TagsAdapter tagsAdapter = new TagsAdapter(context, arrayTags);
+//            recyclerView.setAdapter(tagsAdapter);
+//
+//            // set a listener for the recyclerview
+//
+//        }
 
 
     }
