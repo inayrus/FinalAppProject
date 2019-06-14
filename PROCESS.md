@@ -76,3 +76,6 @@ Three things before the alpha version is complete:
 * Linking the API to the SelectActivity so a photo can be converted to digital text.
 * Adding a tag to a note in NoteActivity.
 * Sorting on a tag in MainActivity.
+
+#### Day 5
+I've been working on getting the API to work. The biggest problems were figuring out why the ConvertRequest class could be built but not be put on the phone, and finding an acceptable image format for the API. Choosing an image from the gallery returns an URI, but the API only accepts URL's and binary image data. I eventually managed to turn the URI into a filepath, which could potentially be a compatible format. However, I haven't been able to test this yet, because I'll have to request a new subscription key first. 
