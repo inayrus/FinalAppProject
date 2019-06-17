@@ -82,4 +82,4 @@ I've been working on getting the API to work. The biggest problems were figuring
 
 ### Week 3
 #### Day 1
-Android studio reported an error that there is no git repository in this project? 
+* Android studio reported an error that there is no git repository in this project? After testing: the commits still seem to work, so I think there is no issue.

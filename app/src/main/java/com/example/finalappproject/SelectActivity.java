@@ -79,7 +79,7 @@ public class SelectActivity extends AppCompatActivity implements ConvertRequest.
         try {
             File imageFile = new File(getRealPathFromURI(selectedImage));
             System.out.println(imageFile);
-//            x.convertToText(this, imageFile);
+            x.convertToText(this, imageFile);
         }
         catch (Exception e) {
             e.printStackTrace();

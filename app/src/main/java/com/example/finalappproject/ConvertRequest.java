@@ -52,7 +52,7 @@ public class ConvertRequest {
     // **********************************************
 
     // Replace <Subscription Key> with your valid subscription key.
-    private static final String subscriptionKey = "<Subscription Key>";
+    private static final String subscriptionKey = "337ae08a8ace4bc7950da0128c1e3752";
 
     // You must use the same Azure region in your REST API method as you used to
     // get your subscription keys. For example, if you got your subscription keys
@@ -103,6 +103,7 @@ public class ConvertRequest {
 
             // Call the first REST API method to detect the text.
             HttpResponse response = httpTextClient.execute(request);
+            System.out.println("request send");
 
             // Check for success.
             if (response.getStatusLine().getStatusCode() != 202) {

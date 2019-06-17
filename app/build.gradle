@@ -38,4 +38,6 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.5'
     implementation 'org.apache.httpcomponents:httpcore:4.4.9'
     implementation 'org.json:json:20180130'
+//    implementation  group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
+
 }
