@@ -78,4 +78,8 @@ Three things before the alpha version is complete:
 * Sorting on a tag in MainActivity.
 
 #### Day 5
-I've been working on getting the API to work. The biggest problems were figuring out why the ConvertRequest class could be built but not be put on the phone, and finding an acceptable image format for the API. Choosing an image from the gallery returns an URI, but the API only accepts URL's and binary image data. I eventually managed to turn the URI into a filepath, which could potentially be a compatible format. However, I haven't been able to test this yet, because I'll have to request a new subscription key first. 
+I've been working on getting the API to work. The biggest problems were figuring out why the ConvertRequest class could be built but the app could not be installed on the phone, and finding an image format that the API could acceor. Choosing an image from the gallery returns an URI, but the API only accepts URL's and binary image data. I eventually managed to turn the URI into a filepath, which could potentially be a compatible format. However, I haven't been able to test this yet, because I'll have to request a new subscription key first.
+
+### Week 3
+#### Day 1
+Android studio reported an error that there is no git repository in this project? 
