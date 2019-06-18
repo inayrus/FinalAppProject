@@ -2,29 +2,67 @@ package com.example.finalappproject;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
+import com.microsoft.projectoxford.vision.VisionServiceClient;
+import com.microsoft.projectoxford.vision.VisionServiceRestClient;
+import com.microsoft.projectoxford.vision.contract.HandwritingRecognitionOperation;
+import com.microsoft.projectoxford.vision.contract.HandwritingRecognitionOperationResult;
+import com.microsoft.projectoxford.vision.contract.HandwritingTextLine;
+import com.microsoft.projectoxford.vision.contract.HandwritingTextWord;
+import com.microsoft.projectoxford.vision.rest.VisionServiceException;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
 
-public class SelectActivity extends AppCompatActivity implements ConvertRequest.Callback {
+public class SelectActivity extends AppCompatActivity {
 
-    // private attribute
+    // button that enables image selection
+    private Button selectImageButton;
+
+    // URI of chosen image
     private Uri selectedImage;
+
+    // bitmap of chosen image
+    private Bitmap bitmap;
+
+    // text field with the converted result
+    EditText resultText;
+
+    private VisionServiceClient client;
+
+    //max retry times to get operation result
+    private int retryCountThreshold = 30;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select);
+
+        // link to the API
+        if (client == null) {
+            client = new VisionServiceRestClient(getString(R.string.subscription_key), getString(R.string.subscription_apiroot));
+        }
+
+        selectImageButton = findViewById(R.id.buttonSelectImage);
+        resultText = findViewById(R.id.editTextResult);
 
         // set the toolbar
         Toolbar toolbar = findViewById(R.id.selectActToolbar);
@@ -42,69 +80,141 @@ public class SelectActivity extends AppCompatActivity implements ConvertRequest.
     public void selectClicked(View v) {
 
         // give user access to their gallery
-        Intent pickedPhoto = new Intent(Intent.ACTION_PICK,
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         // being handled by the onActivityResult method
-        startActivityForResult(pickedPhoto, 0);
+        startActivityForResult(pickPhoto, 0);
     }
 
     // called when a photo is chosen from the gallery
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-        ImageView imageView = findViewById(R.id.imageView);
-
+        // if image is selected successfully
         if (resultCode == RESULT_OK) {
-            // show chosen photo in the imageview
-            this.selectedImage = imageReturnedIntent.getData();
+
+            // set URI and bitmap
+            this. selectedImage = imageReturnedIntent.getData();
+
+            bitmap = ImageHelper.loadSizeLimitedBitmapFromUri(
+                    selectedImage, getContentResolver());
 
             // resize the image for the view
-            Picasso.with(getApplicationContext()).load(selectedImage).fit().centerCrop().into(imageView);
-//            imageView.setImageURI(selectedImage);
-            imageView.setVisibility(View.VISIBLE);
+            if (bitmap != null) {
+                ImageView imageView = findViewById(R.id.imageView);
+                Picasso.with(getApplicationContext()).load(selectedImage).fit().centerCrop().into(imageView);
 
-            // make convert button visible
-            findViewById(R.id.convertButton).setVisibility(View.VISIBLE);
+                // make convert button visible
+                findViewById(R.id.convertButton).setVisibility(View.VISIBLE);
+            }
         }
     }
 
     public void convertClicked(View v) {
+        // everything below this is new and based on the Cognitive Vision Android sample
 
-        // call ImageHelper to check the dimensions of the photo and resize if necessary
-
-        // call request class to send photo to microsoft API
-        ConvertRequest x = new ConvertRequest(this);
+        selectImageButton.setEnabled(false);
+        resultText.setText("Analyzing...");
 
         try {
-            File imageFile = new File(getRealPathFromURI(selectedImage));
-            System.out.println(imageFile);
-            x.convertToText(this, imageFile);
+            new doRequest(this).execute();
+        } catch (Exception e) {
+            resultText.setText("Error encountered. Exception is: " + e.toString());
         }
-        catch (Exception e) {
-            e.printStackTrace();
+    }
+
+    private static class doRequest extends AsyncTask<String, String, String> {
+        // Store error message
+        private Exception e = null;
+
+        private WeakReference<SelectActivity> recognitionActivity;
+
+        public doRequest(SelectActivity activity) {
+            recognitionActivity = new WeakReference<SelectActivity>(activity);
         }
-        System.out.println("AHHHHHHHHHHH");
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                if (recognitionActivity.get() != null) {
+                    return recognitionActivity.get().process();
+                }
+            } catch (Exception e) {
+                // Store error
+                this.e = e;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String data) {
+            super.onPostExecute(data);
+
+            if (recognitionActivity.get() == null) {
+                return;
+            }
+            // Display based on error existence
+            if (e != null) {
+                recognitionActivity.get().resultText.setText("Error: " + e.getMessage());
+                this.e = null;
+            } else {
+                Gson gson = new Gson();
+                HandwritingRecognitionOperationResult r = gson.fromJson(data, HandwritingRecognitionOperationResult.class);
+
+                StringBuilder resultBuilder = new StringBuilder();
+                //if recognition result status is failed. display failed
+                if (r.getStatus().equals("Failed")) {
+                    resultBuilder.append("Error: Recognition Failed");
+                } else {
+                    for (HandwritingTextLine line : r.getRecognitionResult().getLines()) {
+                        for (HandwritingTextWord word : line.getWords()) {
+                            resultBuilder.append(word.getText() + " ");
+                        }
+                        resultBuilder.append("\n");
+                    }
+                    resultBuilder.append("\n");
+                }
+
+                recognitionActivity.get().resultText.setText(resultBuilder);
+            }
+            recognitionActivity.get().selectImageButton.setEnabled(true);
+        }
     }
 
-    public String getRealPathFromURI(Uri uri) {
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
-    }
+    private String process() throws VisionServiceException, IOException, InterruptedException {
+        Gson gson = new Gson();
 
-        // got the note from the microsoft API
-    @Override
-    public void gotNote(Note note) {
-        // is it possible to edit a textfield in the activity below this one?
-        // so if this activity is an extra layer above the other one?
+        // Put the image into an input stream for detection.
+        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
 
-        // is it possible to give the string with new text to the onResume of the NoteActivity?
-    }
+            try (ByteArrayInputStream inputStream = new ByteArrayInputStream(output.toByteArray())) {
+                //post image and got operation from API
+                HandwritingRecognitionOperation operation = this.client.createHandwritingRecognitionOperationAsync(inputStream);
 
-    @Override
-    public void gotNoteError(String message) {
+                HandwritingRecognitionOperationResult operationResult;
+                //try to get recognition result until it finished.
 
+                int retryCount = 0;
+                do {
+                    if (retryCount > retryCountThreshold) {
+                        throw new InterruptedException("Can't get result after retry in time.");
+                    }
+                    Thread.sleep(1000);
+                    operationResult = this.client.getHandwritingRecognitionOperationResultAsync(operation.Url());
+                }
+                while (operationResult.getStatus().equals("NotStarted") || operationResult.getStatus().equals("Running"));
+
+                String result = gson.toJson(operationResult);
+                Log.d("result", result);
+                return result;
+
+            } catch (Exception ex) {
+                throw ex;
+            }
+        } catch (Exception ex) {
+            throw ex;
+        }
     }
 }

@@ -40,4 +40,6 @@ dependencies {
     implementation 'org.json:json:20180130'
 //    implementation  group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
 
+    implementation 'com.microsoft.projectoxford:vision:1.0.395'
+
 }

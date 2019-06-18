@@ -83,3 +83,5 @@ I've been working on getting the API to work. The biggest problems were figuring
 ### Week 3
 #### Day 1
 * Android studio reported an error that there is no git repository in this project? After testing: the commits still seem to work, so I think there is no issue.
+* Been trying to link an activity to the API. I got a working subscription key and copied quickstart code from the Microsoft Computer Vision website, but running this gave me an NoSuchFieldError for the AllowAllHostnameVerifier apache class. Apparently this class is deprecated.
+* Natasja and Marijn helped me find an alternative, so now I'm trying to link my app to the API with an Android client library: https://github.com/microsoft/Cognitive-Vision-Android
