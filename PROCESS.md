@@ -85,3 +85,9 @@ I've been working on getting the API to work. The biggest problems were figuring
 * Android studio reported an error that there is no git repository in this project? After testing: the commits still seem to work, so I think there is no issue.
 * Been trying to link an activity to the API. I got a working subscription key and copied quickstart code from the Microsoft Computer Vision website, but running this gave me an NoSuchFieldError for the AllowAllHostnameVerifier apache class. Apparently this class is deprecated.
 * Natasja and Marijn helped me find an alternative, so now I'm trying to link my app to the API with an Android client library: https://github.com/microsoft/Cognitive-Vision-Android
+
+#### Day 2
+* The link to the API is working! The example code on the Cognitive Vision Android github works well, so now the SelectActivity class can recognize handwriting!
+* Improved the layout of the SelectActivity.
+* Added the SelectActivity as an option in the NoteActivity, recognizing handwriting doesn't have to start with an empty note; multiple handwriting photos can be converted to text in the same note.
+* I also made a start to find a way for the recognized text to be added to the NoteActivity. It's now implemented with an intent, but the downside is that the old NoteActivity is still under it when you press back. Tomorrow I might need to look into the startActivityForResult method.

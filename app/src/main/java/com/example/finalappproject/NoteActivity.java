@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class NoteActivity extends AppCompatActivity implements ConvertRequest.Callback {
+public class NoteActivity extends AppCompatActivity {
 
     // attributes
     private Note retrievedNote;
@@ -66,6 +66,12 @@ public class NoteActivity extends AppCompatActivity implements ConvertRequest.Ca
     // horizontal scroll view for the tags
         // needs an adapter
 
+//    // got the note from the microsoft API
+//    @Override
+//    public void gotNote(Note note) {
+//
+//    }
+
     // save note
     public void doneClicked(View v) {
 
@@ -87,17 +93,6 @@ public class NoteActivity extends AppCompatActivity implements ConvertRequest.Ca
 
         // send the user to the start screen
         finish();
-    }
-
-    // got the note from the microsoft API
-    @Override
-    public void gotNote(Note note) {
-
-    }
-
-    @Override
-    public void gotNoteError(String message) {
-
     }
 
     // return to previous screen
@@ -165,6 +160,11 @@ public class NoteActivity extends AppCompatActivity implements ConvertRequest.Ca
                 // use the ShareActionProvider widget: action provider to share information with other apps
 
                 return true;
+            case R.id.action_add:
+                // send user to SelectActivity
+                Intent intent = new Intent(NoteActivity.this, SelectActivity.class);
+                intent.putExtra("Existing note", retrievedNote);
+                startActivity(intent);
 
             default:
                 // the user's click action is not recognized

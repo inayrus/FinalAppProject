@@ -12,12 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
         <activity android:name=".SelectActivity"
-            android:parentActivityName="com.example.finalappproject.MainActivity"/>
+            android:parentActivityName=".NoteActivity"/>
         <!-- To support the back/up action on 4.0 and lower -->
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.example.finalappproject.MainActivity" />
+        <!--<meta-data-->
+            <!--android:name="android.support.PARENT_ACTIVITY"-->
+            <!--android:value=".NoteActivity" />-->
 
         <!-- to implement the back option in the toolbar -->
         <activity android:name=".NoteActivity"

@@ -46,15 +46,25 @@ public class SelectActivity extends AppCompatActivity {
     // text field with the converted result
     EditText resultText;
 
+    Button convertButton;
+
+    Button addButton;
+
     private VisionServiceClient client;
 
     //max retry times to get operation result
     private int retryCountThreshold = 30;
 
+    private Note existingNote;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select);
+
+        // unpack existing note
+        Intent intent = getIntent();
+        this.existingNote = (Note) intent.getSerializableExtra("Existing note");
 
         // link to the API
         if (client == null) {
@@ -63,6 +73,10 @@ public class SelectActivity extends AppCompatActivity {
 
         selectImageButton = findViewById(R.id.buttonSelectImage);
         resultText = findViewById(R.id.editTextResult);
+        convertButton = findViewById(R.id.convertButton);
+        addButton = findViewById(R.id.addButton);
+
+        convertButton.setCursorVisible(false);
 
         // set the toolbar
         Toolbar toolbar = findViewById(R.id.selectActToolbar);
@@ -75,6 +89,38 @@ public class SelectActivity extends AppCompatActivity {
 
         // Enable the Up button
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+//    public interface Callback {
+//        void gotNote(Note note);
+//    }
+
+    // adds the recognized text to the note
+    public void addClicked(View v) {
+        //TODO: use an intent or Callback to send add the text to the note
+
+        String newText = resultText.getText().toString();
+        Note note;
+
+        if (existingNote != null) {
+            // add the recognized text to the text of the existing note
+            note = existingNote;
+            String oldText = note.getContent();
+            String combinedText = oldText + "\n" + newText;
+            note.setContent(combinedText);
+        }
+        else {
+            // create a new note and put the text in the content
+            note = new Note();
+            note.setContent(newText);
+            note.setTitle("");
+        }
+
+        // send the note to the NoteActivity
+        Intent intent = new Intent(SelectActivity.this, NoteActivity.class);
+        intent.putExtra("Note", note);
+        startActivity(intent);
+        finish();
     }
 
     public void selectClicked(View v) {
@@ -106,7 +152,7 @@ public class SelectActivity extends AppCompatActivity {
                 Picasso.with(getApplicationContext()).load(selectedImage).fit().centerCrop().into(imageView);
 
                 // make convert button visible
-                findViewById(R.id.convertButton).setVisibility(View.VISIBLE);
+                convertButton.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -177,6 +223,12 @@ public class SelectActivity extends AppCompatActivity {
                 }
 
                 recognitionActivity.get().resultText.setText(resultBuilder);
+                // set cursor visible
+                recognitionActivity.get().resultText.setCursorVisible(true);
+                // disable recognize text button
+                recognitionActivity.get().convertButton.setVisibility(View.INVISIBLE);
+                // make add button visible
+                recognitionActivity.get().addButton.setVisibility(View.VISIBLE);
             }
             recognitionActivity.get().selectImageButton.setEnabled(true);
         }
@@ -208,6 +260,7 @@ public class SelectActivity extends AppCompatActivity {
 
                 String result = gson.toJson(operationResult);
                 Log.d("result", result);
+
                 return result;
 
             } catch (Exception ex) {

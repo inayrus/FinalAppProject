@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".NoteActivity">
 
-    <!-- Add Tags, should always appear as action button -->
-    <item android:id="@+id/action_tags"
-        android:icon="@drawable/baseline_label_black_18dp"
-        android:title="@string/action_tag"
+    <!-- "Add", should always appear as action button -->
+    <item
+        android:id="@+id/action_add"
+        android:icon="@drawable/pen_pict"
+        android:title="@string/action_add"
         app:showAsAction="ifRoom"/>
 
     <!-- "Delete", should always appear as action button -->
@@ -15,6 +16,12 @@
         android:id="@+id/action_delete"
         android:icon="@drawable/baseline_delete_black_18dp"
         android:title="@string/action_delete"
+        app:showAsAction="ifRoom"/>
+
+    <!-- Add Tags, should always appear as action button -->
+    <item android:id="@+id/action_tags"
+        android:icon="@drawable/baseline_label_black_18dp"
+        android:title="@string/action_tag"
         app:showAsAction="ifRoom"/>
 
     <!-- "Share", appear as action button if possible-->
