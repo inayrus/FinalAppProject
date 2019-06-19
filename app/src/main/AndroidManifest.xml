@@ -3,7 +3,7 @@
     package="com.example.finalappproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +22,8 @@
 
         <!-- to implement the back option in the toolbar -->
         <activity android:name=".NoteActivity"
-            android:parentActivityName="com.example.finalappproject.MainActivity"/>
+            android:parentActivityName="com.example.finalappproject.MainActivity"
+            android:launchMode= "singleTask"/>
         <!-- To support the back/up action on 4.0 and lower -->
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"

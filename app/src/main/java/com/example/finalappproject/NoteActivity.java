@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,20 +29,11 @@ public class NoteActivity extends AppCompatActivity {
         // save the database
         this.db = NoteDatabase.getInstance(getApplicationContext());
 
-        // get the note from the intent
-        Intent intent = getIntent();
-        this.retrievedNote = (Note) intent.getSerializableExtra("Note");
+        // display note in UI
+        displayNote();
 
-        // unpack note if note is being edited (not newly made)
-        if (retrievedNote != null) {
-            TextView titleView = findViewById(R.id.editTitle);
-            titleView.setText(String.valueOf(retrievedNote.getTitle()));
-
-            TextView contentView = findViewById(R.id.editContent);
-            contentView.setText(String.valueOf(retrievedNote.getContent()));
-
-            // GOTDAMN TAGS
-        }
+        // hide keyboard until an edittext is clicked
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         // set the toolbar
         Toolbar toolbar = findViewById(R.id.noteActToolbar);
@@ -56,6 +48,25 @@ public class NoteActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
+    // retrieves a note from intent and displays it in the Activity
+    private void displayNote() {
+
+        // get the note from the intent
+        Intent intent = getIntent();
+        this.retrievedNote = (Note) intent.getSerializableExtra("Note");
+
+        // unpack note if note is being edited (not newly made)
+        if (retrievedNote != null) {
+            TextView titleView = findViewById(R.id.editTitle);
+            titleView.setText(String.valueOf(retrievedNote.getTitle()));
+
+            TextView contentView = findViewById(R.id.editContent);
+            contentView.setText(String.valueOf(retrievedNote.getContent()));
+
+            // GOTDAMN TAGS
+        }
+    }
+
     // link the action buttons to the toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -65,12 +76,6 @@ public class NoteActivity extends AppCompatActivity {
 
     // horizontal scroll view for the tags
         // needs an adapter
-
-//    // got the note from the microsoft API
-//    @Override
-//    public void gotNote(Note note) {
-//
-//    }
 
     // save note
     public void doneClicked(View v) {
@@ -90,7 +95,6 @@ public class NoteActivity extends AppCompatActivity {
                 db.update(editedNote.getId(), editedNote);
             }
         }
-
         // send the user to the start screen
         finish();
     }
@@ -163,13 +167,22 @@ public class NoteActivity extends AppCompatActivity {
             case R.id.action_add:
                 // send user to SelectActivity
                 Intent intent = new Intent(NoteActivity.this, SelectActivity.class);
-                intent.putExtra("Existing note", retrievedNote);
+                intent.putExtra("Existing note", getNoteFromView());
                 startActivity(intent);
 
             default:
                 // the user's click action is not recognized
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        System.out.println("yoo we're back");
+        setIntent(intent);
+        //now getIntent() should always return the last received intent
+        displayNote();
     }
 
     // build the pop up for delete confirmation

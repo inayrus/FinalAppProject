@@ -91,13 +91,8 @@ public class SelectActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-//    public interface Callback {
-//        void gotNote(Note note);
-//    }
-
     // adds the recognized text to the note
     public void addClicked(View v) {
-        //TODO: use an intent or Callback to send add the text to the note
 
         String newText = resultText.getText().toString();
         Note note;
@@ -136,12 +131,11 @@ public class SelectActivity extends AppCompatActivity {
     // called when a photo is chosen from the gallery
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-
         // if image is selected successfully
         if (resultCode == RESULT_OK) {
 
             // set URI and bitmap
-            this. selectedImage = imageReturnedIntent.getData();
+            this.selectedImage = imageReturnedIntent.getData();
 
             bitmap = ImageHelper.loadSizeLimitedBitmapFromUri(
                     selectedImage, getContentResolver());

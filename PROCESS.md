@@ -91,3 +91,7 @@ I've been working on getting the API to work. The biggest problems were figuring
 * Improved the layout of the SelectActivity.
 * Added the SelectActivity as an option in the NoteActivity, recognizing handwriting doesn't have to start with an empty note; multiple handwriting photos can be converted to text in the same note.
 * I also made a start to find a way for the recognized text to be added to the NoteActivity. It's now implemented with an intent, but the downside is that the old NoteActivity is still under it when you press back. Tomorrow I might need to look into the startActivityForResult method.
+
+#### Day 3
+* Renske suggested that the problem with multiple stacked NoteActivities (return to NoteActivity after text is recognized from a photo in SelecActivity) could be handled by specifying this activity as a SingleInstance/ SingleTask in the manifest.
+* Edited the NoteActivity code so the keyboard only opens after an EditText has been clicked.
