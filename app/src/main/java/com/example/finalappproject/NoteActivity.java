@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,7 +64,10 @@ public class NoteActivity extends AppCompatActivity {
             TextView contentView = findViewById(R.id.editContent);
             contentView.setText(String.valueOf(retrievedNote.getContent()));
 
-            // GOTDAMN TAGS
+            String stringTags = retrievedNote.getStringTags();
+            TagsAdapter tagsAdapter = new TagsAdapter(this);
+            tagsAdapter.setTags((LinearLayout)findViewById(R.id.tagsNoteAct), stringTags);
+
         }
     }
 

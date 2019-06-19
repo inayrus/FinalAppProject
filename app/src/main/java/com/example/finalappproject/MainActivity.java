@@ -95,14 +95,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    // select photo fab is clicked
-//    public void selectPhotoClicked(View v) {
-//
-//        // send user to SelectActivity
-//        Intent intent = new Intent(MainActivity.this, SelectActivity.class);
-//        startActivity(intent);
-//    }
-
     private void updateData() {
         // get all the updated data from the database
         Cursor newCursor = db.selectAll();
