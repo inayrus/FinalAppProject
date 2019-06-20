@@ -8,19 +8,26 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class NoteActivity extends AppCompatActivity {
 
     // attributes
     private Note retrievedNote;
     private NoteDatabase db;
+    private CharSequence[] allTags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -32,6 +39,9 @@ public class NoteActivity extends AppCompatActivity {
 
         // display note in UI
         displayNote();
+
+        // save all the tags
+        this.allTags = new CharSequence[]{" Easy "," Medium "," Hard "," Very Hard "};
 
         // hide keyboard until an edittext is clicked
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -160,14 +170,27 @@ public class NoteActivity extends AppCompatActivity {
             case R.id.action_tags:
                 // implement action provider to let the user select tags
                 // https://developer.android.com/training/appbar/action-views
+                // https://stackoverflow.com/questions/14729592/show-popup-menu-on-actionbar-item-click
 
-                Toast.makeText(this, "Tags click", Toast.LENGTH_LONG).show();
+//                View menuItemView = findViewById(R.id.action_tags); // SAME ID AS MENU ID
+//                PopupMenu popupMenu = new PopupMenu(this, menuItemView);
+//
+//                popupMenu.inflate(R.menu.add_tags_menu);
+//
+//                popupMenu.getMenu().add(R.id.groupTags, Menu.NONE, Menu.NONE, "added item");
+//                // ...
+//                popupMenu.show();
+//                // ...
+
+                // pop up
+                AlertDialog alert = tagsListBuild().create();
+                alert.show();
                 return true;
 
-            case R.id.action_share:
-                // use the ShareActionProvider widget: action provider to share information with other apps
+//            case R.id.action_share:
+//                // use the ShareActionProvider widget: action provider to share information with other apps
 
-                return true;
+//                return true;
             case R.id.action_add:
                 // send user to SelectActivity
                 Intent intent = new Intent(NoteActivity.this, SelectActivity.class);
@@ -210,6 +233,71 @@ public class NoteActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
+                    }
+                });
+
+        return builder;
+    }
+
+    // build a pop up for the list with all tags
+    private AlertDialog.Builder tagsListBuild() {
+        // temporary test array with all tags MUST BE CharSequence[]
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add tags");
+        builder.setCancelable(true);
+
+        // link to the layout made for the dialogue
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialogue_add_tags, null);
+        builder.setView(dialogView);
+
+        // https://stackoverflow.com/questions/30982403/android-checkbox-gets-unchecked-on-keyboard-show-up
+        // get the edittext where a new tag is gonna be put in
+        EditText editText = (EditText) dialogView.findViewById(R.id.newTag);
+        editText.setText("test label");
+
+        // arraylist to keep the selected items
+        final ArrayList selectedTags = new ArrayList();
+
+        // http://www.learn-android-easily.com/2013/06/alertdialog-with-checkbox.html
+        builder.setMultiChoiceItems(allTags, null,
+                new DialogInterface.OnMultiChoiceClickListener() {
+
+                    // indexSelected contains the index of item (of which checkbox checked)
+                    @Override
+                    public void onClick(DialogInterface dialog, int indexSelected,
+                                        boolean isChecked) {
+                        if (isChecked) {
+                            // If the user checked the item, add it to the selected items
+                            selectedTags.add(indexSelected);
+                        }
+                        else if (selectedTags.contains(indexSelected)) {
+                            // remove item if it's already in Array
+                            selectedTags.remove(Integer.valueOf(indexSelected));
+                        }
+                        else {
+                            // remove item if unselected
+                            selectedTags.remove(indexSelected);
+                            System.out.print(selectedTags);
+                        }
+                    }
+                });
+
+        builder.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder.setPositiveButton(
+                "Apply",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // add the chosen tags to the view below
+                        finish();
                     }
                 });
 

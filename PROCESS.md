@@ -96,4 +96,7 @@ I've been working on getting the API to work. The biggest problems were figuring
 * Renske suggested that the problem with multiple stacked NoteActivities (return to NoteActivity after text is recognized from a photo in SelecActivity) could be handled by specifying this activity as a SingleInstance/ SingleTask in the manifest.
 * Edited the NoteActivity code so the keyboard only opens after an EditText has been clicked.
 * Displayed the tags in the NoteActivity.
-* Started research on how to create a pop up menu when an icon in the tool bar is clicked. The idea is for a pop up menu to open when the tags icon is clicked. I want to display all the made tags so far in it, with the extra option to make a new tag. All these option would have a checkbox and are all selectable. At this moment I'm not sure how such a pop up can be achieved.   
+* Started research on how to create a pop up menu when an icon in the tool bar is clicked. The idea is for a pop up menu to open when the tags icon is clicked. I want to display all the made tags so far in it, with the extra option to make a new tag. All these option would have a checkbox and are all selectable. At this moment I'm not sure how such a pop up can be achieved.
+
+#### Day 4
+* I looked into PopupMenu as a way to display a pop up for choosing tags and put it in my code. Renske suggested that AlertDialogue could also be an option and I have to agree thatit does more have the look I was going for.
