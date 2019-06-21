@@ -21,12 +21,8 @@ public class Note implements Serializable {
     }
 
     // convert the tags array to a string, seperated with commas
-    public String getUpdatedStringTags() {
-        this.stringTags = this.arrayTags.toString();
-
-        stringTags = stringTags.replace("[", "")
-                .replace("]", "")
-                .replace(" ", "");
+    public String updateStringTags(ArrayList<String> array) {
+        this.stringTags = android.text.TextUtils.join(",", array);
         return stringTags;
     }
 

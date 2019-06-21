@@ -13,10 +13,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private NoteDatabase db;
     private NoteAdapter notesAdapter;
+    private CharSequence[] allTags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
         Cursor cursor = db.selectAll();
         this.notesAdapter = new NoteAdapter(this, cursor);
 
+        // get all the tags from the database
+        this.allTags = db.getAllTags();
+
         // set the adapter to the list
         ListView notesList = findViewById(R.id.notesList);
         notesList.setAdapter(notesAdapter);
@@ -50,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateData();
+        this.allTags = db.getAllTags();
     }
 
     // if a note in the list is clicked
@@ -82,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
             note.setId(noteId);
 
             intent.putExtra("Note", note);
+            intent.putExtra("allTags", allTags);
 
             startActivity(intent);
         }
@@ -92,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
         // send the user to the NoteActivity
         Intent intent = new Intent(MainActivity.this, NoteActivity.class);
+        intent.putExtra("allTags", allTags);
         startActivity(intent);
     }
 

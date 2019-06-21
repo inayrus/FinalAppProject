@@ -99,4 +99,13 @@ I've been working on getting the API to work. The biggest problems were figuring
 * Started research on how to create a pop up menu when an icon in the tool bar is clicked. The idea is for a pop up menu to open when the tags icon is clicked. I want to display all the made tags so far in it, with the extra option to make a new tag. All these option would have a checkbox and are all selectable. At this moment I'm not sure how such a pop up can be achieved.
 
 #### Day 4
-* I looked into PopupMenu as a way to display a pop up for choosing tags and put it in my code. Renske suggested that AlertDialogue could also be an option and I have to agree thatit does more have the look I was going for.
+* I looked into PopupMenu as a way to display a pop up for choosing tags and put it in my code. Renske suggested that AlertDialogue could also be an option and I have to agree that it does more have the look I was going for. Most of the day I've been trying different layouts that allow for a list of checkbox items (tags), with an extra editText option under it in case the user wants to add a new tag.
+* Implementing a layout succeeded, though it's not very pretty to look at yet.
+
+#### Day 5
+* Today I wanted to:
+  1. Link the Add Tags AlertDialogue to display the right tags.
+  2. Change the displayed tags in NoteActivity and MainActivity when different tags are checked and saved, respectively.  
+  3. Allow the user to create new tags.
+  4. Implement a filter-on-tags option in MainActivity.
+* I succeeded in executing the first three points. There does seem to be a bug in the third point, however. If the user unselects all the tags, or when they make a new tag but it has no string (""), the NoteActivity displays a small gray rectangle.  

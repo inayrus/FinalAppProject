@@ -9,52 +9,94 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TagsAdapter {
 
     private Context context;
+    private CharSequence[] allTags;
 
     public TagsAdapter(Context context) {
         this.context = context;
     }
 
-    // add tag buttons if a note has tags
     public void setTags(LinearLayout tagHolder, String stringTags) {
-        // programmatically adding tag buttons
-//        LinearLayout tagHolder = view.findViewById(R.id.tagsHolder);
 
+
+
+        // add tag buttons if a note has tags
         if (stringTags != null) {
             // convert the string with tags to an ArrayList<String>
             Note note = new Note();
             ArrayList<String> arrayTags = note.getUpdatedArrayTags(stringTags);
+            System.out.println("entered the tagsadapter in: " + context);
+            System.out.println("tags to put in there: " + stringTags);
 
-            // only add new tags if they were not already set in the view
-            if (arrayTags.size() != tagHolder.getChildCount()) {
+            int childCount = tagHolder.getChildCount();
 
-                // start with the first unplaced tag
-                for (int i = tagHolder.getChildCount(), lenTags = arrayTags.size(); i < lenTags; i++) {
+            // if there are tags, but the amounts don't match up: delete all views and start again
+            if ((arrayTags.size() != childCount) & childCount != 0) {
 
-                    // add a clickable textview
-                    TextView txtTag = new TextView(context);
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(5, 0, 5, 5);
-                    txtTag.setLayoutParams(params);
+                tagHolder.removeAllViews();
 
-                    // format of the text
-                    String tag = arrayTags.get(i);
-                    formatView(txtTag, tag);
+            }
+            // place tags
+            if ((arrayTags.size() != childCount)) {
+                // childCount == 0: add all the tags
+                for (int i = 0, lenTags = arrayTags.size(); i < lenTags; i++) {
+
+                    TextView tagView = createTextView(arrayTags.get(i));
 
                     // add textView to layout
-                    tagHolder.addView(txtTag);
+                    tagHolder.addView(tagView);
+
+                }
+            }
+            // else (count and size are same and not 0) check if content matches up.
+            else {
+                // remember what tags need to be added
+                ArrayList<String> toAdd = new ArrayList<>(arrayTags);
+
+                int index = 0;
+                while (index < tagHolder.getChildCount()) {
+                    TextView tagView = (TextView)tagHolder.getChildAt(index);
+
+                    if (!arrayTags.contains(tagView.getText())) {
+                        // remove view from UI if it's not in arrayTags
+                        tagHolder.removeView(tagView);
+                    }
+                    else {
+                        // if tag is in arrayTags, delete it from the toAdd list
+                        toAdd.remove(tagView.getText());
+                        index++;
+                    }
+                }
+
+                // if a view is removed, add the missing tag
+                if (toAdd.size() != 0) {
+                    for (String tag: toAdd) {
+
+                        TextView tagView = createTextView(tag);
+                        // add textView to layout
+                        tagHolder.addView(tagView);
+                    }
                 }
             }
         }
     }
 
-    // formats the TextView that has the tags in it
-    private void formatView(TextView txtTag, String tag) {
+    private TextView createTextView(String tag) {
+        // add a clickable textview
+        TextView txtTag = new TextView(context);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(5, 0, 5, 5);
+        txtTag.setLayoutParams(params);
+
+        // formats the TextView that has the tags in it
         txtTag.setText(tag);
         txtTag.setTag(tag);
         txtTag.setTextSize(12);
@@ -63,6 +105,8 @@ public class TagsAdapter {
         txtTag.setPadding(15, 7, 15, 7);
         txtTag.setFocusable(false);
         txtTag.setOnClickListener(new mainTagClicked());
+
+        return txtTag;
     }
 
     // onClick method for when a tag in the MainView is clicked
