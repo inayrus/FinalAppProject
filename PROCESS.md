@@ -108,4 +108,7 @@ I've been working on getting the API to work. The biggest problems were figuring
   2. Change the displayed tags in NoteActivity and MainActivity when different tags are checked and saved, respectively.  
   3. Allow the user to create new tags.
   4. Implement a filter-on-tags option in MainActivity.
-* I succeeded in executing the first three points. There does seem to be a bug in the third point, however. If the user unselects all the tags, or when they make a new tag but it has no string (""), the NoteActivity displays a small gray rectangle.  
+* I succeeded in executing the first three points. There does seem to be a bug in the third point, however. If the user unselects all the tags, or when they make a new tag but it has no string (""), the NoteActivity displays a small gray rectangle.
+
+#### Day 6
+* Implemented filter function in main   

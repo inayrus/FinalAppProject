@@ -128,4 +128,12 @@ public class NoteDatabase extends SQLiteOpenHelper {
         // return all tags in a charsequence[]
         return allTags.toArray(new CharSequence[allTags.size()]);
     }
+
+    // filters notes on chosen tags
+    public Cursor filterTags(String chosenTag) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        return db.rawQuery("SELECT * FROM Notes WHERE Tags LIKE ?",  new String[] {"%" + chosenTag + "%"});
+
+    }
 }

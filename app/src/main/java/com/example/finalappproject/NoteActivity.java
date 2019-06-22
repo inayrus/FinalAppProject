@@ -100,9 +100,6 @@ public class NoteActivity extends AppCompatActivity {
         return true;
     }
 
-    // horizontal scroll view for the tags
-        // needs an adapter
-
     // save note
     public void doneClicked(View v) {
 

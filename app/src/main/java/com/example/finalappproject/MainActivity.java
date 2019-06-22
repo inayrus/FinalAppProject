@@ -1,25 +1,38 @@
 package com.example.finalappproject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.xml.datatype.Duration;
 
 public class MainActivity extends AppCompatActivity {
 
     private NoteDatabase db;
     private NoteAdapter notesAdapter;
     private CharSequence[] allTags;
+    private int selectedFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +61,17 @@ public class MainActivity extends AppCompatActivity {
         ListItemClickListener listListener = new ListItemClickListener();
         notesList.setOnItemClickListener(listListener);
 
-        // tags adapter is set in the NoteAdapter Classs
+        // initialize selectedFilters on none
+        this.selectedFilter = -1;
+
+        // tags adapter is set in the NoteAdapter Class
+    }
+
+    // link the action buttons to the toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.filter_tags_menu, menu);
+        return true;
     }
 
     // when the user returns to this activity
@@ -105,10 +128,100 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateData() {
-        // get all the updated data from the database
-        Cursor newCursor = db.selectAll();
+        // remember if notes were filtered
+        Cursor newCursor;
+
+        if (selectedFilter == -1) {
+            // get all the updated data from the database
+            newCursor = db.selectAll();
+        }
+        else {
+            // get filtered notes
+            newCursor = db.filterTags(allTags[selectedFilter].toString());
+        }
 
         // replace the cursor in the adapter
         notesAdapter.swapCursor(newCursor);
+    }
+
+    // react to toolbar actions clicks
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_filter:
+                // make alert dialogue with all tag options
+                AlertDialog alert = tagsListBuild().create();
+                alert.show();
+                return true;
+
+            default:
+                // the user's click action is not recognized
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // build a pop up for the list with all tags
+    private AlertDialog.Builder tagsListBuild() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Filter on tags");
+        builder.setCancelable(true);
+
+        // arraylist to keep the selected items
+        final String selectedTag;
+
+        // http://www.learn-android-easily.com/2013/06/alertdialog-with-checkbox.html
+        builder.setSingleChoiceItems(allTags, selectedFilter,
+                new DialogInterface.OnClickListener() {
+
+                    // indexSelected contains the index of item (chosen tag)
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        selectedFilter = which;
+                        System.out.println(selectedFilter);
+                    }
+                });
+
+        builder.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder.setPositiveButton(
+                "Filter",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        Cursor newCursor;
+
+                        // call the database to filter
+                        if (selectedFilter != -1) {
+                            newCursor = db.filterTags(allTags[selectedFilter].toString());
+                        }
+                        // if none selected, call selectAll
+                        else {
+                            newCursor = db.selectAll();
+                        }
+
+                        // replace the cursor in the adapter
+                        notesAdapter.swapCursor(newCursor);
+
+                        dialog.cancel();
+                    }
+                });
+
+        builder.setNeutralButton(
+                "Unselect all",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        selectedFilter = -1;
+                        updateData();
+                    }
+                });
+
+        return builder;
     }
 }

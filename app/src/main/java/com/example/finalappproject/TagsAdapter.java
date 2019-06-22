@@ -17,7 +17,6 @@ import java.util.ArrayList;
 public class TagsAdapter {
 
     private Context context;
-    private CharSequence[] allTags;
 
     public TagsAdapter(Context context) {
         this.context = context;
