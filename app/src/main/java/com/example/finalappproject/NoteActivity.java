@@ -34,6 +34,7 @@ public class NoteActivity extends AppCompatActivity {
     private TagsAdapter tagsAdapter;
     private ArrayList<String> noteTags;
     private String stringTags;
+    private Note convertedNote;
 
 
     @Override
@@ -71,24 +72,36 @@ public class NoteActivity extends AppCompatActivity {
     // retrieves a note from intent and displays it in the Activity
     private void displayNote(Intent intent) {
 
-        // get the note from the intent
-        this.retrievedNote = (Note) intent.getSerializableExtra("Note");
+        Note note = new Note();
 
-        // unpack note if note is being edited (not newly made)
-        if (retrievedNote != null) {
+        // get the note from the intent (from main: database)
+        this.retrievedNote = (Note) intent.getSerializableExtra("Note");
+        // from SelectActivity (converted from photo to text with API)
+        this.convertedNote = (Note) intent.getSerializableExtra("Recognized");
+
+        // unpack note if note is being edited or has just been converted
+        if (retrievedNote != null || convertedNote != null) {
+
+            if (retrievedNote != null) {
+                note = retrievedNote;
+            }
+            else {
+                note = convertedNote;
+            }
+
             TextView titleView = findViewById(R.id.editTitle);
-            titleView.setText(String.valueOf(retrievedNote.getTitle()));
+            titleView.setText(String.valueOf(note.getTitle()));
 
             TextView contentView = findViewById(R.id.editContent);
-            contentView.setText(String.valueOf(retrievedNote.getContent()));
+            contentView.setText(String.valueOf(note.getContent()));
 
-            String stringTags = retrievedNote.getStringTags();
+            String stringTags = note.getStringTags();
             this.tagsAdapter = new TagsAdapter(this);
             tagsAdapter.setTags((LinearLayout)findViewById(R.id.tagsNoteAct), stringTags);
 
             // convert the string with tags to an ArrayList<String>
             if (stringTags != null) {
-                this.noteTags = retrievedNote.getUpdatedArrayTags(stringTags);
+                this.noteTags = note.getUpdatedArrayTags(stringTags);
             }
         }
     }
@@ -105,6 +118,9 @@ public class NoteActivity extends AppCompatActivity {
 
         Note editedNote = getNoteFromView();
 
+        // test why the save note from photo doesn't work
+        System.out.println(editedNote.getContent());
+
         // check if either title field or content field is filled
         if (!editedNote.getContent().equals("") || !editedNote.getTitle().equals("")) {
             NoteDatabase db = NoteDatabase.getInstance(getApplicationContext());
@@ -113,9 +129,11 @@ public class NoteActivity extends AppCompatActivity {
             if (retrievedNote == null) {
                 // new: insert
                 db.insert(editedNote);
+                System.out.println("inserted");
             } else {
                 // edited: update
                 db.update(editedNote.getId(), editedNote);
+                System.out.println("updated");
             }
         }
         // send the user to the start screen
@@ -140,10 +158,14 @@ public class NoteActivity extends AppCompatActivity {
         Note note;
 
         // if note is new
-        if (retrievedNote == null) {
+        if (retrievedNote == null & convertedNote == null) {
             note = new Note();
         }
-        // if note is edited
+        // if note contains converted text
+        else if (convertedNote != null) {
+            note = convertedNote;
+        }
+        // if note is edited normally
         else {
             note = retrievedNote;
         }
@@ -249,9 +271,6 @@ public class NoteActivity extends AppCompatActivity {
         final EditText editText = dialogView.findViewById(R.id.newTag);
         final CheckBox addTagBox = dialogView.findViewById(R.id.addTagCheckBox);
 
-        // arraylist to keep the selected items
-        final ArrayList selectedTags = new ArrayList();
-
         // list with which tags are on the note (in booleans)
         final boolean[] checked = new boolean[allTags.length];
         Arrays.fill(checked, false);
@@ -260,7 +279,6 @@ public class NoteActivity extends AppCompatActivity {
             for (String tag : noteTags) {
                 int index = Arrays.asList(allTags).indexOf(tag);
                 checked[index] = true;
-                selectedTags.add(index);
             }
         }
 
@@ -275,15 +293,9 @@ public class NoteActivity extends AppCompatActivity {
                         if (isChecked) {
                             // If the user checked the item, add it to the selected items
                             checked[indexSelected] = true;
-                            System.out.println(indexSelected);
-                        }
-                        else if (selectedTags.contains(indexSelected)) {
-                            checked[indexSelected] = false;
                         }
                         else {
-                            // remove item if unselected
-                            selectedTags.remove(indexSelected);
-                            System.out.print(selectedTags);
+                            checked[indexSelected] = false;
                         }
                     }
                 });
@@ -312,12 +324,18 @@ public class NoteActivity extends AppCompatActivity {
 
                         // check if the edittext and the checkbox are filled in
                         String newTag = editText.getText().toString();
-                        if (addTagBox.isChecked() & !newTag.matches("")) {
+                        if (addTagBox.isChecked() & !newTag.isEmpty()) {
                             noteTags.add(newTag);
                         }
 
-                        // convert chosen tags to a string
-                        stringTags = android.text.TextUtils.join(",", noteTags);
+                        // convert chosen tags to a string if tags are chosen
+                        if (!noteTags.isEmpty()) {
+                            stringTags = android.text.TextUtils.join(",", noteTags);
+                        }
+                        // no tags are selected
+                        else {
+                            stringTags = null;
+                        }
 
                         // set a new adapter to add the chosen tags to the view below
                         TagsAdapter tagsAdapter = new TagsAdapter(NoteActivity.this);

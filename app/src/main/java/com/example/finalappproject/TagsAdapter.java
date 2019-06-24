@@ -2,16 +2,9 @@ package com.example.finalappproject;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TagsAdapter {
@@ -24,7 +17,7 @@ public class TagsAdapter {
 
     public void setTags(LinearLayout tagHolder, String stringTags) {
 
-
+        tagHolder.removeAllViews();
 
         // add tag buttons if a note has tags
         if (stringTags != null) {
@@ -36,12 +29,6 @@ public class TagsAdapter {
 
             int childCount = tagHolder.getChildCount();
 
-            // if there are tags, but the amounts don't match up: delete all views and start again
-            if ((arrayTags.size() != childCount) & childCount != 0) {
-
-                tagHolder.removeAllViews();
-
-            }
             // place tags
             if ((arrayTags.size() != childCount)) {
                 // childCount == 0: add all the tags
@@ -75,13 +62,11 @@ public class TagsAdapter {
                 }
 
                 // if a view is removed, add the missing tag
-                if (toAdd.size() != 0) {
-                    for (String tag: toAdd) {
+                for (String tag: toAdd) {
+                    TextView tagView = createTextView(tag);
+                    // add textView to layout
+                    tagHolder.addView(tagView);
 
-                        TextView tagView = createTextView(tag);
-                        // add textView to layout
-                        tagHolder.addView(tagView);
-                    }
                 }
             }
         }
@@ -103,22 +88,7 @@ public class TagsAdapter {
         txtTag.setTextColor(Color.WHITE);
         txtTag.setPadding(15, 7, 15, 7);
         txtTag.setFocusable(false);
-        txtTag.setOnClickListener(new mainTagClicked());
 
         return txtTag;
-    }
-
-    // onClick method for when a tag in the MainView is clicked
-    private class mainTagClicked implements View.OnClickListener {
-
-        public void onClick(View v) {
-            TextView tagView = (TextView) v;
-
-            // retrieve what tag is clicked
-            String tag = tagView.getText().toString();
-            System.out.println("clicked: " + tag);
-
-            // TODO: call database to filter on this tag
-        }
     }
 }

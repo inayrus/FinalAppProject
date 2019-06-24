@@ -113,7 +113,7 @@ public class SelectActivity extends AppCompatActivity {
 
         // send the note to the NoteActivity
         Intent intent = new Intent(SelectActivity.this, NoteActivity.class);
-        intent.putExtra("Note", note);
+        intent.putExtra("Recognized", note);
         startActivity(intent);
         finish();
     }

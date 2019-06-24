@@ -111,4 +111,10 @@ I've been working on getting the API to work. The biggest problems were figuring
 * I succeeded in executing the first three points. There does seem to be a bug in the third point, however. If the user unselects all the tags, or when they make a new tag but it has no string (""), the NoteActivity displays a small gray rectangle.
 
 #### Day 6
-* Implemented filter function in main   
+* Implemented filter function in main.   
+
+### Week 4
+#### Day 1
+Did some bug fixes:
+* creating a new note and converting a photo to text is now able to be saved in the database.
+* unchecking all tags on a note no longer shows/saves an empty tag. 
