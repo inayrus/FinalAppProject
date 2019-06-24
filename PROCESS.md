@@ -115,6 +115,9 @@ I've been working on getting the API to work. The biggest problems were figuring
 
 ### Week 4
 #### Day 1
-Did some bug fixes:
-* creating a new note and converting a photo to text is now able to be saved in the database.
-* unchecking all tags on a note no longer shows/saves an empty tag. 
+Changed the layout colours to pink/purple and did some bug fixes:
+* Creating a new note and converting a photo to text is now able to be saved in the database.
+* Unchecking all tags on a note no longer shows/saves an empty tag.
+* Made it possible to first add a new tag to a note, apply it, and then click the Add Tag icon again without the app crashing.
+* Implemented a horizontalscrollview in NoteaActivity so all chosen tags can be seen if there are a lot of them.
+ This solution can not be so easily implemented for the MainActivity tags, however. There the note become unclickable.

@@ -4,15 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:paddingLeft="20dp"
-    android:paddingTop="5dp"
-    android:paddingRight="20dp">
+    android:paddingRight="16dp">
 
     <CheckBox
         android:id="@+id/addTagCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:text="New Tag:" />
+        android:layout_marginRight="18dp"
+        android:textSize="10dp"/>
 
     <EditText
         android:id="@+id/newTag"
@@ -21,5 +20,5 @@
         android:layout_weight="1"
         android:ems="10"
         android:inputType="textPersonName"
-        android:textSize="12dp" />
+        android:textSize="16dp" />
 </LinearLayout>

@@ -24,6 +24,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
 
@@ -325,7 +328,17 @@ public class NoteActivity extends AppCompatActivity {
                         // check if the edittext and the checkbox are filled in
                         String newTag = editText.getText().toString();
                         if (addTagBox.isChecked() & !newTag.isEmpty()) {
+                            // add the tag to the Note
                             noteTags.add(newTag);
+
+                            // add the tag to allTags
+                            ArrayList<CharSequence> tempArray = new ArrayList<CharSequence>();
+
+                            Collections.addAll(tempArray, allTags);
+                            tempArray.add(newTag);
+
+                            allTags = tempArray.toArray(new CharSequence[tempArray.size()]);
+
                         }
 
                         // convert chosen tags to a string if tags are chosen

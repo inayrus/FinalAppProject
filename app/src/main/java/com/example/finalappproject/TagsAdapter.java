@@ -2,6 +2,7 @@ package com.example.finalappproject;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -84,7 +85,7 @@ public class TagsAdapter {
         txtTag.setText(tag);
         txtTag.setTag(tag);
         txtTag.setTextSize(12);
-        txtTag.setBackgroundColor(Color.GRAY);
+        txtTag.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
         txtTag.setTextColor(Color.WHITE);
         txtTag.setPadding(15, 7, 15, 7);
         txtTag.setFocusable(false);
