@@ -2,31 +2,25 @@ package com.example.finalappproject;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
 
@@ -63,7 +57,7 @@ public class NoteActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.noteActToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
-        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.textOnLight));
 
         // Get a support ActionBar for this toolbar
         ActionBar ab = getSupportActionBar();
@@ -75,7 +69,7 @@ public class NoteActivity extends AppCompatActivity {
     // retrieves a note from intent and displays it in the Activity
     private void displayNote(Intent intent) {
 
-        Note note = new Note();
+        Note note;
 
         // get the note from the intent (from main: database)
         this.retrievedNote = (Note) intent.getSerializableExtra("Note");
@@ -85,12 +79,14 @@ public class NoteActivity extends AppCompatActivity {
         // unpack note if note is being edited or has just been converted
         if (retrievedNote != null || convertedNote != null) {
 
-            if (retrievedNote != null) {
-                note = retrievedNote;
-            }
-            else {
+            // converted is most important, bc a note can have both, but converted contains more inf
+            if (convertedNote != null) {
                 note = convertedNote;
             }
+            else {
+                note = retrievedNote;
+            }
+
 
             TextView titleView = findViewById(R.id.editTitle);
             titleView.setText(String.valueOf(note.getTitle()));
@@ -98,9 +94,10 @@ public class NoteActivity extends AppCompatActivity {
             TextView contentView = findViewById(R.id.editContent);
             contentView.setText(String.valueOf(note.getContent()));
 
-            String stringTags = note.getStringTags();
+            this.stringTags = note.getStringTags();
             this.tagsAdapter = new TagsAdapter(this);
             tagsAdapter.setTags((LinearLayout)findViewById(R.id.tagsNoteAct), stringTags);
+            System.out.println("adapter set on: " + stringTags);
 
             // convert the string with tags to an ArrayList<String>
             if (stringTags != null) {
@@ -129,7 +126,7 @@ public class NoteActivity extends AppCompatActivity {
             NoteDatabase db = NoteDatabase.getInstance(getApplicationContext());
 
             // check if note is new or being edited
-            if (retrievedNote == null) {
+            if (retrievedNote == null && convertedNote == null) {
                 // new: insert
                 db.insert(editedNote);
                 System.out.println("inserted");
@@ -176,6 +173,7 @@ public class NoteActivity extends AppCompatActivity {
         note.setTitle(titleView.getText().toString());
         note.setContent(contentView.getText().toString());
         note.setStringTags(stringTags);
+        System.out.println("string tags send to SelectActivity: " + stringTags);
 
         return note;
     }
@@ -204,10 +202,6 @@ public class NoteActivity extends AppCompatActivity {
                 alert.show();
                 return true;
 
-//            case R.id.action_share:
-//                // use the ShareActionProvider widget: action provider to share information with other apps
-
-//                return true;
             case R.id.action_add:
                 // send user to SelectActivity
                 Intent intent = new Intent(NoteActivity.this, SelectActivity.class);

@@ -1,8 +1,8 @@
 /* ***************************************************************************************
  * Helper file that converts an image URI to bitmap.
- * Code from the helper file of https://github.com/microsoft/Cognitive-Vision-Android
+ * Code from this helper file made by: https://github.com/microsoft/Cognitive-Vision-Android
  *
- * by Valerie Sawirja
+ * Valerie Sawirja
  * **************************************************************************************/
 
 package com.example.finalappproject;

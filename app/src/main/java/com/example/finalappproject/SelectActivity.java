@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -82,7 +83,7 @@ public class SelectActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.selectActToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Select Photo");
-        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.textOnLight));
 
         // Get a support ActionBar for this toolbar
         ActionBar actionBar = getSupportActionBar();

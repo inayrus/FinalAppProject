@@ -63,9 +63,9 @@
         android:layout_marginBottom="24dp"
         android:clickable="true"
         android:onClick="doneClicked"
-        android:tint="@android:color/white"
+        android:tint="@color/textOnLight"
         app:backgroundTint="@color/colorAccent"
         app:fabSize="normal"
-        app:srcCompat="@drawable/baseline_done_black_18dp" />
+        app:srcCompat="@drawable/baseline_done_black_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>

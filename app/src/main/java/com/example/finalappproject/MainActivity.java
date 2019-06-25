@@ -1,31 +1,28 @@
+/* *************************************************************************************************
+ * The main activity of the Notes app. Displays a list with all the notes,
+ * has a toolbar with a tag filter option and shows a floating action button.
+ *
+ * Clicking a note or the floating action button sends the user to the NoteActivity.
+ * Clicking the filter icon will open an AlertDialogue, where a tag can be selected.
+ *
+ * by Valerie Sawirja
+ * ************************************************************************************************/
+
 package com.example.finalappproject;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.xml.datatype.Duration;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,28 +40,54 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.mainActToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Notes Organization");
-        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.textOnLight));
 
         // select all notes from the database & set the NoteAdapter
         this.db = NoteDatabase.getInstance(getApplicationContext());
-        Cursor cursor = db.selectAll();
-        this.notesAdapter = new NoteAdapter(this, cursor);
 
         // get all the tags from the database
         this.allTags = db.getAllTags();
 
+        Cursor cursor;
+
+        // if phone is being turned
+        if (savedInstanceState != null) {
+            this.selectedFilter = savedInstanceState.getInt("selectedFilter");
+
+            if (selectedFilter == -1) {
+                // select all
+                cursor = db.selectAll();
+            }
+            else {
+                // get what tag was filtered on
+                cursor = db.filterTags(allTags[selectedFilter].toString());
+            }
+        }
+        // if the activity is newly created
+        else {
+            // display all the notes
+            cursor = db.selectAll();
+
+            // initialize selectedFilters on none
+            this.selectedFilter = -1;
+        }
+
         // set the adapter to the list
+        this.notesAdapter = new NoteAdapter(this, cursor);
         ListView notesList = findViewById(R.id.notesList);
         notesList.setAdapter(notesAdapter);
 
         // set an list item listener
         ListItemClickListener listListener = new ListItemClickListener();
         notesList.setOnItemClickListener(listListener);
+    }
 
-        // initialize selectedFilters on none
-        this.selectedFilter = -1;
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-        // tags adapter is set in the NoteAdapter Class
+        // remember if the notes are filtered
+        outState.putInt("selectedFilter", selectedFilter);
     }
 
     // link the action buttons to the toolbar
@@ -92,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, NoteActivity.class);
             Note note = new Note();
 
-            // cursor can't be put as extra, so unpack the values and send those
+            // cursor can't be put as extra, so unpack the values and send those as a Note
             Cursor cursor = (Cursor) parent.getItemAtPosition(position);
 
             int titleIndex = cursor.getColumnIndex("Title");
@@ -127,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // updates the notes shown (used when applying filter or when new note is added)
     private void updateData() {
         // remember if notes were filtered
         Cursor newCursor;
@@ -148,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
             case R.id.action_filter:
                 // make alert dialogue with all tag options
                 AlertDialog alert = tagsListBuild().create();
@@ -167,9 +192,6 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle("Filter on tags");
         builder.setCancelable(true);
 
-        // arraylist to keep the selected items
-        final String selectedTag;
-
         // http://www.learn-android-easily.com/2013/06/alertdialog-with-checkbox.html
         builder.setSingleChoiceItems(allTags, selectedFilter,
                 new DialogInterface.OnClickListener() {
@@ -179,14 +201,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         selectedFilter = which;
                         System.out.println(selectedFilter);
-                    }
-                });
-
-        builder.setNegativeButton(
-                "Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
                     }
                 });
 
@@ -213,8 +227,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        builder.setNeutralButton(
-                "Unselect all",
+        builder.setNegativeButton(
+                "Show all",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         selectedFilter = -1;

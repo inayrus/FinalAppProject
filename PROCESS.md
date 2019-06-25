@@ -121,3 +121,10 @@ Changed the layout colours to pink/purple and did some bug fixes:
 * Made it possible to first add a new tag to a note, apply it, and then click the Add Tag icon again without the app crashing.
 * Implemented a horizontalscrollview in NoteaActivity so all chosen tags can be seen if there are a lot of them.
  This solution can not be so easily implemented for the MainActivity tags, however. There the note become unclickable.
+
+#### Day 2
+* Cleaned my repository from made, but unused files.
+* Fixed a few bugs concerning the tags and converting a photo to text.
+* Made the layout more pretty, with sharp icons and more colours.
+
+For tomorrow I need to add a saveInstanceState in the SelectActivity and look if I can improve my code. I also need to rewrite my README, add a PROPOSAL.md, think about Licence, and start on the final report.
