@@ -1,5 +1,5 @@
 /* *************************************************************************************************
- * The user is send to SelectActivity when they click the handwriting icon in NoteActivity.
+ * The user is send to RecognizeHandwritingActivity when they click the handwriting icon in NoteActivity.
  *
  * This file contains functions that make it possible to recognize handwriting from a photo:
  * - lets the user choose an image
@@ -45,9 +45,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-public class SelectActivity extends AppCompatActivity {
+public class RecognizeHandwritingActivity extends AppCompatActivity {
 
-    // TODO maybe call this activity SelectImageActivity or something? If it's only about that feature
     // button that enables image selection
     private Button selectImageButton;
 
@@ -74,7 +73,7 @@ public class SelectActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select);
+        setContentView(R.layout.activity_recognize_handwriting);
 
         // unpack existing note
         Intent intent = getIntent();
@@ -138,7 +137,7 @@ public class SelectActivity extends AppCompatActivity {
         }
 
         // send the note to the NoteActivity
-        Intent intent = new Intent(SelectActivity.this, NoteActivity.class);
+        Intent intent = new Intent(RecognizeHandwritingActivity.this, NoteActivity.class);
         intent.putExtra("Recognized", note);
         startActivity(intent);
         finish();
@@ -183,10 +182,10 @@ public class SelectActivity extends AppCompatActivity {
         // Store error message
         private Exception e = null;
 
-        private WeakReference<SelectActivity> recognitionActivity;
+        private WeakReference<RecognizeHandwritingActivity> recognitionActivity;
 
-        public doRequest(SelectActivity activity) {
-            recognitionActivity = new WeakReference<SelectActivity>(activity);
+        public doRequest(RecognizeHandwritingActivity activity) {
+            recognitionActivity = new WeakReference<RecognizeHandwritingActivity>(activity);
         }
 
         @Override

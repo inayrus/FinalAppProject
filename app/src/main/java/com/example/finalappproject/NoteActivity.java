@@ -9,7 +9,7 @@
  *                    3) Add Recognized Handwriting
  *
  * The Delete and Add Tags options both open an AlertDialogue.
- * The Add Recognized Handwriting function sends the user to SelectActivity
+ * The Add Recognized Handwriting function sends the user to RecognizeHandwritingActivity
  *
  * by Valerie Sawirja
  * ************************************************************************************************/
@@ -89,7 +89,7 @@ public class NoteActivity extends AppCompatActivity {
 
         // get the note from the intent (from main: database)
         this.retrievedNote = (Note) intent.getSerializableExtra("Note");
-        // from SelectActivity (converted from photo to text with API)
+        // from RecognizeHandwritingActivity (converted from photo to text with API)
         this.convertedNote = (Note) intent.getSerializableExtra("Recognized");
 
         // unpack note if note is being edited or has just been converted
@@ -211,8 +211,8 @@ public class NoteActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_add:
-                // send user to SelectActivity
-                Intent intent = new Intent(NoteActivity.this, SelectActivity.class);
+                // send user to RecognizeHandwritingActivity
+                Intent intent = new Intent(NoteActivity.this, RecognizeHandwritingActivity.class);
                 intent.putExtra("Existing note", getNoteFromView());
                 startActivity(intent);
 
@@ -222,7 +222,7 @@ public class NoteActivity extends AppCompatActivity {
         }
     }
 
-    // called when user returns from SelectActivity
+    // called when user returns from RecognizeHandwritingActivity
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);

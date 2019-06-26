@@ -128,3 +128,7 @@ Changed the layout colours to pink/purple and did some bug fixes:
 * Made the layout more pretty, with sharp icons and more colours.
 
 For tomorrow I need to add a saveInstanceState in the SelectActivity and look if I can improve my code. I also need to rewrite my README, add a PROPOSAL.md, think about Licence, and start on the final report.
+
+#### Day 3
+* Did a code review with Levy. She suggested to change the SelectActivity name to something more specifically for the file, so I changed it to RecognizeHandwritingActivity.
+* Cleaned the code of all the print statements and out commented code.

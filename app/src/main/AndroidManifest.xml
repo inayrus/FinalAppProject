@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-        <activity android:name=".SelectActivity"
+        <activity android:name=".RecognizeHandwritingActivity"
             android:parentActivityName=".NoteActivity"/>
         <!-- To support the back/up action on 4.0 and lower -->
         <!--<meta-data-->

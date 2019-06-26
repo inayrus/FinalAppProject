@@ -25,7 +25,7 @@ public class Note implements Serializable {
         this.arrayTags = new ArrayList<>(Arrays.asList(stringTags.split(",")));
         return arrayTags;
     }
-// TODO delete getters en setters die je niet gebruikt?
+
     // setters
     public void setId(int id) {
         this.id = id;
