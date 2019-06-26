@@ -7,7 +7,7 @@
  * - shows the recognize text in an EditView
  * - allows the user to add the recognized text to their note.
  *
- * All the code below convertClicked is gotten from:
+ * All the code below convertClicked is gotten from an API wrapper:
  * https://github.com/microsoft/Cognitive-Vision-Android
  *
  * by Valerie Sawirja
@@ -57,11 +57,11 @@ public class RecognizeHandwritingActivity extends AppCompatActivity {
     private Bitmap bitmap;
 
     // text field with the converted result
-    EditText resultText;
+    private EditText resultText;
 
-    Button convertButton;
+    private Button convertButton;
 
-    Button addButton;
+    private Button addButton;
 
     private VisionServiceClient client;
 

@@ -232,8 +232,10 @@ public class NoteActivity extends AppCompatActivity {
             case R.id.action_add:
                 // send user to RecognizeHandwritingActivity
                 Intent intent = new Intent(NoteActivity.this, RecognizeHandwritingActivity.class);
+
                 // includes all the non saved edits
                 intent.putExtra("Existing note", getNoteFromView());
+
                 // as a control to see if the note already existed in the database
                 intent.putExtra("dbNote", retrievedNote);
                 startActivity(intent);
