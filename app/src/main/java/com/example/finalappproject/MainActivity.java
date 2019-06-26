@@ -77,9 +77,9 @@ public class MainActivity extends AppCompatActivity {
         ListView notesList = findViewById(R.id.notesList);
         notesList.setAdapter(notesAdapter);
 
-        // set an list item listener
-        ListItemClickListener listListener = new ListItemClickListener();
-        notesList.setOnItemClickListener(listListener);
+        // set a listener for when a note in the list is clicked
+        ListItemClickListener noteClickListener = new ListItemClickListener();
+        notesList.setOnItemClickListener(noteClickListener);
     }
 
     @Override
@@ -135,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
             note.setId(noteId);
 
             intent.putExtra("Note", note);
+
+            // send the list with all the tags
             intent.putExtra("allTags", allTags);
 
             startActivity(intent);
@@ -200,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         selectedFilter = which;
-                        System.out.println(selectedFilter);
                     }
                 });
 

@@ -1,3 +1,20 @@
+/* *************************************************************************************************
+ * A file that implements the functionality of the NoteActivity.
+ * It contains:
+ * - a function that shows a note in the UI
+ * - a function that stores the information from the UI in a note
+ * - a function that saves/updates a note in the database and sends the user back to MainActivity
+ * - toolbar actions: 1) Delete
+ *                    2) Add Tags
+ *                    3) Add Recognized Handwriting
+ *
+ * The Delete and Add Tags options both open an AlertDialogue.
+ * The Add Recognized Handwriting function sends the user to SelectActivity
+ *
+ * by Valerie Sawirja
+ * ************************************************************************************************/
+
+
 package com.example.finalappproject;
 
 import android.content.DialogInterface;
@@ -28,7 +45,6 @@ public class NoteActivity extends AppCompatActivity {
     private Note retrievedNote;
     private NoteDatabase db;
     private CharSequence[] allTags;
-    private TagsAdapter tagsAdapter;
     private ArrayList<String> noteTags;
     private String stringTags;
     private Note convertedNote;
@@ -79,14 +95,12 @@ public class NoteActivity extends AppCompatActivity {
         // unpack note if note is being edited or has just been converted
         if (retrievedNote != null || convertedNote != null) {
 
-            // converted is most important, bc a note can have both, but converted contains more inf
             if (convertedNote != null) {
                 note = convertedNote;
             }
             else {
                 note = retrievedNote;
             }
-
 
             TextView titleView = findViewById(R.id.editTitle);
             titleView.setText(String.valueOf(note.getTitle()));
@@ -95,9 +109,8 @@ public class NoteActivity extends AppCompatActivity {
             contentView.setText(String.valueOf(note.getContent()));
 
             this.stringTags = note.getStringTags();
-            this.tagsAdapter = new TagsAdapter(this);
+            TagsAdapter tagsAdapter = new TagsAdapter(this);
             tagsAdapter.setTags((LinearLayout)findViewById(R.id.tagsNoteAct), stringTags);
-            System.out.println("adapter set on: " + stringTags);
 
             // convert the string with tags to an ArrayList<String>
             if (stringTags != null) {
@@ -118,8 +131,6 @@ public class NoteActivity extends AppCompatActivity {
 
         Note editedNote = getNoteFromView();
 
-        // test why the save note from photo doesn't work
-        System.out.println(editedNote.getContent());
 
         // check if either title field or content field is filled
         if (!editedNote.getContent().equals("") || !editedNote.getTitle().equals("")) {
@@ -129,11 +140,9 @@ public class NoteActivity extends AppCompatActivity {
             if (retrievedNote == null && convertedNote == null) {
                 // new: insert
                 db.insert(editedNote);
-                System.out.println("inserted");
             } else {
                 // edited: update
                 db.update(editedNote.getId(), editedNote);
-                System.out.println("updated");
             }
         }
         // send the user to the start screen
@@ -173,7 +182,6 @@ public class NoteActivity extends AppCompatActivity {
         note.setTitle(titleView.getText().toString());
         note.setContent(contentView.getText().toString());
         note.setStringTags(stringTags);
-        System.out.println("string tags send to SelectActivity: " + stringTags);
 
         return note;
     }
@@ -209,17 +217,16 @@ public class NoteActivity extends AppCompatActivity {
                 startActivity(intent);
 
             default:
-                // the user's click action is not recognized
+                // any other click on the toolbar is not recognized as an action
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    // called when user returns from SelectActivity
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        System.out.println("yoo we're back");
         setIntent(intent);
-        //now getIntent() should always return the last received intent
         displayNote(intent);
     }
 
@@ -250,9 +257,8 @@ public class NoteActivity extends AppCompatActivity {
         return builder;
     }
 
-    // build a pop up for the list with all tags
+    // build a pop up that contains a list with checkboxes for all the tags.
     private AlertDialog.Builder tagsListBuild() {
-        // temporary test array with all tags MUST BE CharSequence[]
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add tags");
@@ -268,7 +274,7 @@ public class NoteActivity extends AppCompatActivity {
         final EditText editText = dialogView.findViewById(R.id.newTag);
         final CheckBox addTagBox = dialogView.findViewById(R.id.addTagCheckBox);
 
-        // list with which tags are on the note (in booleans)
+        // list with which tags are on the note (false: tag is not selected, true: tag is selected)
         final boolean[] checked = new boolean[allTags.length];
         Arrays.fill(checked, false);
 
@@ -283,12 +289,11 @@ public class NoteActivity extends AppCompatActivity {
         builder.setMultiChoiceItems(allTags, checked,
                 new DialogInterface.OnMultiChoiceClickListener() {
 
-                    // indexSelected contains the index of item (of which checkbox checked)
+                    // change boolean if the user selected a tag for the note
                     @Override
                     public void onClick(DialogInterface dialog, int indexSelected,
                                         boolean isChecked) {
                         if (isChecked) {
-                            // If the user checked the item, add it to the selected items
                             checked[indexSelected] = true;
                         }
                         else {
@@ -313,7 +318,7 @@ public class NoteActivity extends AppCompatActivity {
                         noteTags = new ArrayList<>();
 
                         for (int i = 0; i < checked.length; i++) {
-                            // get the strings of the checked tags
+                            // get strings of the tags that are selected (have checked checkboxes)
                             if (checked[i]) {
                                 noteTags.add(allTags[i].toString());
                             }
@@ -326,11 +331,9 @@ public class NoteActivity extends AppCompatActivity {
                             noteTags.add(newTag);
 
                             // add the tag to allTags
-                            ArrayList<CharSequence> tempArray = new ArrayList<CharSequence>();
-
+                            ArrayList<CharSequence> tempArray = new ArrayList<>();
                             Collections.addAll(tempArray, allTags);
                             tempArray.add(newTag);
-
                             allTags = tempArray.toArray(new CharSequence[tempArray.size()]);
 
                         }
@@ -344,7 +347,7 @@ public class NoteActivity extends AppCompatActivity {
                             stringTags = null;
                         }
 
-                        // set a new adapter to add the chosen tags to the view below
+                        // set a new adapter to add the chosen tags to the view
                         TagsAdapter tagsAdapter = new TagsAdapter(NoteActivity.this);
                         tagsAdapter.setTags((LinearLayout) findViewById(R.id.tagsNoteAct), stringTags);
 

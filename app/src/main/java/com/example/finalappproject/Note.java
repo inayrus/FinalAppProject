@@ -1,3 +1,9 @@
+/* *************************************************************************************************
+ * A class that represents a note.
+ *
+ * by Valerie Sawirja
+ * ************************************************************************************************/
+
 package com.example.finalappproject;
 
 import java.io.Serializable;
@@ -19,13 +25,7 @@ public class Note implements Serializable {
         this.arrayTags = new ArrayList<>(Arrays.asList(stringTags.split(",")));
         return arrayTags;
     }
-
-    // convert the tags array to a string, seperated with commas
-    public String updateStringTags(ArrayList<String> array) {
-        this.stringTags = android.text.TextUtils.join(",", array);
-        return stringTags;
-    }
-
+// TODO delete getters en setters die je niet gebruikt?
     // setters
     public void setId(int id) {
         this.id = id;
@@ -43,10 +43,6 @@ public class Note implements Serializable {
         this.stringTags = stringTags;
     }
 
-    public void setArrayTags(ArrayList<String> arrayTags) {
-        this.arrayTags = arrayTags;
-    }
-
     public void setTimestamp(int timestamp) {
         this.timestamp = timestamp;
     }
@@ -62,10 +58,6 @@ public class Note implements Serializable {
 
     public String getContent() {
         return content;
-    }
-
-    public ArrayList<String> getArrayTags() {
-        return arrayTags;
     }
 
     public String getStringTags() {

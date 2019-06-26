@@ -1,12 +1,24 @@
+/* *************************************************************************************************
+ * The user is send to SelectActivity when they click the handwriting icon in NoteActivity.
+ *
+ * This file contains functions that make it possible to recognize handwriting from a photo:
+ * - lets the user choose an image
+ * - sends the photo to the microsoft computer vision api
+ * - shows the recognize text in an EditView
+ * - allows the user to add the recognized text to their note.
+ *
+ * All the code below convertClicked is gotten from:
+ * https://github.com/microsoft/Cognitive-Vision-Android
+ *
+ * by Valerie Sawirja
+ * ************************************************************************************************/
+
 package com.example.finalappproject;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +47,7 @@ import java.lang.ref.WeakReference;
 
 public class SelectActivity extends AppCompatActivity {
 
+    // TODO maybe call this activity SelectImageActivity or something? If it's only about that feature
     // button that enables image selection
     private Button selectImageButton;
 
@@ -53,7 +66,7 @@ public class SelectActivity extends AppCompatActivity {
 
     private VisionServiceClient client;
 
-    //max retry times to get operation result
+    //max retry times to get operation result, gotten from
     private int retryCountThreshold = 30;
 
     private Note existingNote;
@@ -69,7 +82,8 @@ public class SelectActivity extends AppCompatActivity {
 
         // link to the API
         if (client == null) {
-            client = new VisionServiceRestClient(getString(R.string.subscription_key), getString(R.string.subscription_apiroot));
+            client = new VisionServiceRestClient(getString(R.string.subscription_key),
+                    getString(R.string.subscription_apiroot));
         }
 
         selectImageButton = findViewById(R.id.buttonSelectImage);
@@ -90,6 +104,17 @@ public class SelectActivity extends AppCompatActivity {
 
         // Enable the Up button
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    // lets the user pick a photo from their photo gallery
+    public void selectClicked(View v) {
+
+        // give user access to their gallery
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        // being handled by the onActivityResult method
+        startActivityForResult(pickPhoto, 0);
     }
 
     // adds the recognized text to the note
@@ -119,16 +144,6 @@ public class SelectActivity extends AppCompatActivity {
         finish();
     }
 
-    public void selectClicked(View v) {
-
-        // give user access to their gallery
-        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        // being handled by the onActivityResult method
-        startActivityForResult(pickPhoto, 0);
-    }
-
     // called when a photo is chosen from the gallery
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
@@ -153,7 +168,6 @@ public class SelectActivity extends AppCompatActivity {
     }
 
     public void convertClicked(View v) {
-        // everything below this is new and based on the Cognitive Vision Android sample
 
         selectImageButton.setEnabled(false);
         resultText.setText("Analyzing...");

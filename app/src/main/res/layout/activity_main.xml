@@ -37,18 +37,4 @@
         android:src="@drawable/ic_add_white_24dp"
         android:tint="@color/textOnLight"
         app:backgroundTint="@color/colorAccent" />
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fabPhoto"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="top|end"-->
-        <!--android:layout_marginBottom="80dp"-->
-        <!--android:src="@drawable/gallery_pict"-->
-        <!--android:tint="?attr/colorBackgroundFloating"-->
-        <!--app:backgroundTint="@color/colorPrimary"-->
-        <!--app:layout_anchor="@id/fabWrite"-->
-        <!--app:layout_anchorGravity="top"-->
-        <!--android:clickable="true"-->
-        <!--android:onClick="selectPhotoClicked"/>-->
 </android.support.design.widget.CoordinatorLayout>

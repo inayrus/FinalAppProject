@@ -1,3 +1,18 @@
+/* *************************************************************************************************
+ * This file contains database related functions.
+ * On create, a new database is made. Only one of the can exist at the same time.
+ *
+ * It also consists of functions that:
+ * - select all notes from database.
+ * - insert a note
+ * - update a note
+ * - delete a note
+ * - get all the used tags in the database
+ * - select all notes with a certain tag
+ *
+ * by Valerie Sawirja
+ * ************************************************************************************************/
+
 package com.example.finalappproject;
 
 import android.content.ContentValues;
@@ -24,13 +39,14 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table Notes(_id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Content TEXT, Tags TEXT, Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP);");
+        db.execSQL("create table Notes(_id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, " +
+                "Content TEXT, Tags TEXT, Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP);");
 
         // an example entry
-        db.execSQL("INSERT INTO Notes(Title, Content, Tags) VALUES('Test Title!'," +
-                "'Test content goes like blablablablablablabalbalablabalbalbalbalablal', 'tag1,tag2')");
-        db.execSQL("INSERT INTO Notes(Title, Content, Tags) VALUES('Title 2'," +
-                "'Test content goes like blablablablablablabalbalablabalbalbalbalablal', 'tag1.1,tag2.1')");
+        db.execSQL("INSERT INTO Notes(Title, Content, Tags) VALUES('First Note!'," +
+                "'An introduction to the app. You can add let the app read handwriting from a " +
+                "photo and add the recognized text to a note, you can add tags to your notes, " +
+                "and on the Home Screen you can filter on tags :)', 'introduction')");
     }
 
     // a constructor
@@ -117,7 +133,6 @@ public class NoteDatabase extends SQLiteOpenHelper {
                     for (String tag : parts) {
                         if (!allTags.contains(tag)) {
                             allTags.add(tag);
-                            System.out.println("added this tag to allTags list: " + tag);
                         }
                     }
                 }
@@ -133,7 +148,8 @@ public class NoteDatabase extends SQLiteOpenHelper {
     public Cursor filterTags(String chosenTag) {
         SQLiteDatabase db = getWritableDatabase();
 
-        return db.rawQuery("SELECT * FROM Notes WHERE Tags LIKE ?",  new String[] {"%" + chosenTag + "%"});
+        return db.rawQuery("SELECT * FROM Notes WHERE Tags LIKE ?",
+                new String[] {"%" + chosenTag + "%"});
 
     }
 }
