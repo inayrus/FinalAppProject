@@ -65,32 +65,64 @@ public class RecognizeHandwritingActivity extends AppCompatActivity {
 
     private VisionServiceClient client;
 
-    //max retry times to get operation result, gotten from
+    //max retry times to get operation result, gotten from API wrapper
     private int retryCountThreshold = 30;
 
     private Note existingNote;
+    private Note dbNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recognize_handwriting);
 
-        // unpack existing note
-        Intent intent = getIntent();
-        this.existingNote = (Note) intent.getSerializableExtra("Existing note");
+        // get Views
+        selectImageButton = findViewById(R.id.buttonSelectImage);
+        resultText = findViewById(R.id.editTextResult);
+        convertButton = findViewById(R.id.convertButton);
+        addButton = findViewById(R.id.addButton);
+
+        if (savedInstanceState == null) {
+            // unpack existing note
+            Intent intent = getIntent();
+            this.existingNote = (Note) intent.getSerializableExtra("Existing note");
+            this.dbNote = (Note) intent.getSerializableExtra("dbNote");
+
+            convertButton.setCursorVisible(false);
+        }
+        else {
+            // get variables
+            String editedText = savedInstanceState.getString("resultText");
+            this.selectedImage = savedInstanceState.getParcelable("imageUri");
+            this.existingNote = (Note) savedInstanceState.getSerializable("existingNote");
+            this.dbNote = (Note) savedInstanceState.getSerializable("dbNote");
+
+            // put variables
+            bitmap = ImageHelper.loadSizeLimitedBitmapFromUri(
+                    selectedImage, getContentResolver());
+
+            // resize the image for the view
+            if (bitmap != null) {
+                ImageView imageView = findViewById(R.id.imageView);
+                Picasso.with(getApplicationContext()).load(selectedImage).fit().centerCrop().into(imageView);
+
+                // make convert button visible
+                convertButton.setVisibility(View.VISIBLE);
+            }
+
+            this.resultText.setText(editedText);
+            // show buttons depends on if photo is already converted
+            if (!resultText.getText().toString().isEmpty()) {
+                addButton.setVisibility(View.VISIBLE);
+                convertButton.setVisibility(View.INVISIBLE);
+            }
+        }
 
         // link to the API
         if (client == null) {
             client = new VisionServiceRestClient(getString(R.string.subscription_key),
                     getString(R.string.subscription_apiroot));
         }
-
-        selectImageButton = findViewById(R.id.buttonSelectImage);
-        resultText = findViewById(R.id.editTextResult);
-        convertButton = findViewById(R.id.convertButton);
-        addButton = findViewById(R.id.addButton);
-
-        convertButton.setCursorVisible(false);
 
         // set the toolbar
         Toolbar toolbar = findViewById(R.id.selectActToolbar);
@@ -103,6 +135,16 @@ public class RecognizeHandwritingActivity extends AppCompatActivity {
 
         // Enable the Up button
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("resultText", resultText.getText().toString());
+        outState.putParcelable("imageUri", selectedImage);
+        outState.putSerializable("Existing note", existingNote);
+        outState.putSerializable("dbNote", dbNote);
     }
 
     // lets the user pick a photo from their photo gallery
@@ -120,25 +162,18 @@ public class RecognizeHandwritingActivity extends AppCompatActivity {
     public void addClicked(View v) {
 
         String newText = resultText.getText().toString();
+        Intent intent = new Intent(RecognizeHandwritingActivity.this, NoteActivity.class);
         Note note;
 
-        if (existingNote != null) {
-            // add the recognized text to the text of the existing note
-            note = existingNote;
-            String oldText = note.getContent();
-            String combinedText = oldText + "\n" + newText;
-            note.setContent(combinedText);
-        }
-        else {
-            // create a new note and put the text in the content
-            note = new Note();
-            note.setContent(newText);
-            note.setTitle("");
-        }
+        // add the recognized text to the text of the existing note
+        note = existingNote;
+        String oldText = note.getContent();
+        String combinedText = oldText + "\n" + newText;
+        note.setContent(combinedText);
 
         // send the note to the NoteActivity
-        Intent intent = new Intent(RecognizeHandwritingActivity.this, NoteActivity.class);
         intent.putExtra("Recognized", note);
+        intent.putExtra("oldNote", dbNote);
         startActivity(intent);
         finish();
     }

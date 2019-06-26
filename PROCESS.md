@@ -132,3 +132,4 @@ For tomorrow I need to add a saveInstanceState in the SelectActivity and look if
 #### Day 3
 * Did a code review with Levy. She suggested to change the SelectActivity name to something more specifically for the file, so I changed it to RecognizeHandwritingActivity.
 * Cleaned the code of all the print statements and out commented code.
+* Added a savedInstanceState to every activity.

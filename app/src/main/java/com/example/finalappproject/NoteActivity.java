@@ -42,9 +42,9 @@ import java.util.Collections;
 public class NoteActivity extends AppCompatActivity {
 
     // attributes
-    private Note retrievedNote;
     private NoteDatabase db;
     private CharSequence[] allTags;
+    private Note retrievedNote;
     private ArrayList<String> noteTags;
     private String stringTags;
     private Note convertedNote;
@@ -58,13 +58,28 @@ public class NoteActivity extends AppCompatActivity {
         // save the database
         this.db = NoteDatabase.getInstance(getApplicationContext());
 
-        Intent intent = getIntent();
+        // if the activity is newly created
+        if (savedInstanceState == null) {
+            Intent intent = getIntent();
 
-        // save all the tags
-        this.allTags = intent.getCharSequenceArrayExtra("allTags");
+            // save all the tags
+            this.allTags = intent.getCharSequenceArrayExtra("allTags");
 
-        // display note in UI
-        displayNote(intent);
+            // get note from intent
+            this.retrievedNote = (Note) intent.getSerializableExtra("Note");
+
+            // display note in UI
+            if (retrievedNote != null) {
+                displayNote(retrievedNote);
+            }
+        }
+        // if the screen is turned
+        else {
+            this.retrievedNote = (Note) savedInstanceState.getSerializable("retrievedNote");
+            this.allTags = savedInstanceState.getCharSequenceArray("allTags");
+            Note rememberedNote = (Note) savedInstanceState.getSerializable("rememberNote");
+            displayNote(rememberedNote);
+        }
 
         // hide keyboard until an edittext is clicked
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -82,40 +97,33 @@ public class NoteActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-    // retrieves a note from intent and displays it in the Activity
-    private void displayNote(Intent intent) {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-        Note note;
+        // remember what is on the screen
+        Note rememberNote = getNoteFromView();
+        outState.putSerializable("rememberNote", rememberNote);
+        outState.putSerializable("retrievedNote", retrievedNote);
+        outState.putCharSequenceArray("allTags", allTags);
+    }
 
-        // get the note from the intent (from main: database)
-        this.retrievedNote = (Note) intent.getSerializableExtra("Note");
-        // from RecognizeHandwritingActivity (converted from photo to text with API)
-        this.convertedNote = (Note) intent.getSerializableExtra("Recognized");
+    // display the note in the Activity
+    private void displayNote(Note note) {
 
-        // unpack note if note is being edited or has just been converted
-        if (retrievedNote != null || convertedNote != null) {
+        TextView titleView = findViewById(R.id.editTitle);
+        titleView.setText(String.valueOf(note.getTitle()));
 
-            if (convertedNote != null) {
-                note = convertedNote;
-            }
-            else {
-                note = retrievedNote;
-            }
+        TextView contentView = findViewById(R.id.editContent);
+        contentView.setText(String.valueOf(note.getContent()));
 
-            TextView titleView = findViewById(R.id.editTitle);
-            titleView.setText(String.valueOf(note.getTitle()));
+        this.stringTags = note.getStringTags();
+        TagsAdapter tagsAdapter = new TagsAdapter(this);
+        tagsAdapter.setTags((LinearLayout)findViewById(R.id.tagsNoteAct), stringTags);
 
-            TextView contentView = findViewById(R.id.editContent);
-            contentView.setText(String.valueOf(note.getContent()));
-
-            this.stringTags = note.getStringTags();
-            TagsAdapter tagsAdapter = new TagsAdapter(this);
-            tagsAdapter.setTags((LinearLayout)findViewById(R.id.tagsNoteAct), stringTags);
-
-            // convert the string with tags to an ArrayList<String>
-            if (stringTags != null) {
-                this.noteTags = note.getUpdatedArrayTags(stringTags);
-            }
+        // convert the string with tags to an ArrayList<String>
+        if (stringTags != null) {
+            this.noteTags = note.getUpdatedArrayTags(stringTags);
         }
     }
 
@@ -131,13 +139,12 @@ public class NoteActivity extends AppCompatActivity {
 
         Note editedNote = getNoteFromView();
 
-
         // check if either title field or content field is filled
         if (!editedNote.getContent().equals("") || !editedNote.getTitle().equals("")) {
             NoteDatabase db = NoteDatabase.getInstance(getApplicationContext());
 
             // check if note is new or being edited
-            if (retrievedNote == null && convertedNote == null) {
+            if (retrievedNote == null) {
                 // new: insert
                 db.insert(editedNote);
             } else {
@@ -186,6 +193,18 @@ public class NoteActivity extends AppCompatActivity {
         return note;
     }
 
+    // called when user returns from RecognizeHandwritingActivity
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        this.convertedNote = (Note) intent.getSerializableExtra("Recognized");
+        displayNote(convertedNote);
+
+        // to remember if a note is new (retrievedNote == null) or being edited (!= null)
+        this.retrievedNote = (Note) intent.getSerializableExtra("oldNote");
+    }
+
     // react to toolbar actions clicks
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -213,21 +232,16 @@ public class NoteActivity extends AppCompatActivity {
             case R.id.action_add:
                 // send user to RecognizeHandwritingActivity
                 Intent intent = new Intent(NoteActivity.this, RecognizeHandwritingActivity.class);
+                // includes all the non saved edits
                 intent.putExtra("Existing note", getNoteFromView());
+                // as a control to see if the note already existed in the database
+                intent.putExtra("dbNote", retrievedNote);
                 startActivity(intent);
 
             default:
                 // any other click on the toolbar is not recognized as an action
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    // called when user returns from RecognizeHandwritingActivity
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        displayNote(intent);
     }
 
     // build the pop up for delete confirmation

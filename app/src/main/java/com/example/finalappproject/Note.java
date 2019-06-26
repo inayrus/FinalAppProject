@@ -13,7 +13,7 @@ import java.util.Arrays;
 public class Note implements Serializable {
 
     // attributes
-    private int id;
+    private Integer id;
     private String title;
     private String content;
     private ArrayList<String> arrayTags;
@@ -27,7 +27,7 @@ public class Note implements Serializable {
     }
 
     // setters
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -48,7 +48,7 @@ public class Note implements Serializable {
     }
 
     // getters
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
