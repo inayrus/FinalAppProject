@@ -15,10 +15,6 @@
 
         <activity android:name=".RecognizeHandwritingActivity"
             android:parentActivityName=".NoteActivity"/>
-        <!-- To support the back/up action on 4.0 and lower -->
-        <!--<meta-data-->
-            <!--android:name="android.support.PARENT_ACTIVITY"-->
-            <!--android:value=".NoteActivity" />-->
 
         <!-- to implement the back option in the toolbar -->
         <activity android:name=".NoteActivity"

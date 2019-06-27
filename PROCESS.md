@@ -136,3 +136,6 @@ For tomorrow I need to add a saveInstanceState in the SelectActivity and look if
 * Transformed my README to a PROPOSAL.md
 
 Tomorrow I'm planning to make a video, rewrite the readme, and add a license.
+
+#### Day 4
+* Changed the app name and added an icon.

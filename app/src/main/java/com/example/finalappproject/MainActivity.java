@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         // set the toolbar
         Toolbar toolbar = findViewById(R.id.mainActToolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Notes Organization");
+        getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.textOnLight));
 
         // select all notes from the database & set the NoteAdapter
