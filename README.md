@@ -12,16 +12,19 @@ The second screen is the Note screen, which the user is directed to when they cl
 ![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_note_empty.png)
 
 Choosing handwriting recognition in the toolbar opens the third screen. Here the user is prompted to select a photo, after which a convert button will appear. Clicking this button starts the handwriting recognition. The result appears in a textbox, where the user can edit the text and add it to the note.
+
 ![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_hand_empty.png)
 ![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_hand_photo.png)
 ![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_hand_complete.png)
 ![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_note_added.png)
 
 Choosing the Tags option lets the user choose and create new tags. There tags will also appear in the filter list in the overview.
+
 ![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_note_addtag.png)
 ![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_filter_newtag.png)
 
 Clicking the delete option will open a pop-up that asks for confirmation.
+
 ![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_note_delete.png)
 
 
