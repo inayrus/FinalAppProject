@@ -28,7 +28,6 @@ Clicking the delete option will open a pop-up that asks for confirmation.
 
 ![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_note_delete.png)
 
-
 #### Copyright statements
 The Noted app is licenced with the MIT licence by Valerie Sawirja. For more details, see [LICENCE](https://github.com/inayrus/FinalAppProject/blob/master/LICENCE.md).
 
@@ -37,7 +36,5 @@ This app leans on the following code libraries:
 * [The Microsoft Computer Vision API](https://azure.microsoft.com/en-gb/services/cognitive-services/computer-vision/)
 * [The Microsoft Computer Vision API: Android Client Library](https://github.com/microsoft/Cognitive-Vision-Android)
 
-
-
-V * the application name,
-* a couple of screen shots (resized to appropriate width/height for readability)
+#### App demo
+[Demo video on YouTube](https://www.youtube.com/watch?v=nO15kuC4tuk)
