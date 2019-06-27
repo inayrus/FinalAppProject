@@ -9,6 +9,7 @@ The app has three screens. There is an overview screen with all the notes, which
 ![filter after](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_filter_postlist.png)
 
 The second screen is the Note screen, which the user is directed to when they click a note in the overview or the plus sign. Here, the user can use either of the three actions in the tool bar: handwriting recognition from a photo, adding tags to a note, or deleting a note.
+
 ![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_note_empty.png)
 
 Choosing handwriting recognition in the toolbar opens the third screen. Here the user is prompted to select a photo, after which a convert button will appear. Clicking this button starts the handwriting recognition. The result appears in a textbox, where the user can edit the text and add it to the note.
