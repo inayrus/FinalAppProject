@@ -1,49 +1,39 @@
-# FinalAppProject: Note Organization App
+# Noted
 
-## Summary
-My name is Valerie Sawirja and this is an app proposal for the final project of the minor programmeren.
-The main goal of this app would be to be able to store and organize typed notes and handwritten notes in the same place.
-With this app, the user can make new notes, save them in different folders, and edit them.
+Noted is a note making app, created during the Minor Programming of the University of Amsterdam. A few features are creating and editing notes, organizing notes with tags, and handwriting recognition. The handwriting recognition allows the user to upload a photo with handwritten text on it and let the app turn the recognized handwriting into digital text. This text can then be edited and added to a note.
+
+The app has three screens. There is an overview screen with all the notes, which includes a filter option
+
+![overview](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_overview.png)
+![filter before](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_filter_before.png)
+![filter after](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_filter_postlist.png)
+
+The second screen is the Note screen, which the user is directed to when they click a note in the overview or the plus sign. Here, the user can use either of the three actions in the tool bar: handwriting recognition from a photo, adding tags to a note, or deleting a note.
+![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_note_empty.png)
+
+Choosing handwriting recognition in the toolbar opens the third screen. Here the user is prompted to select a photo, after which a convert button will appear. Clicking this button starts the handwriting recognition. The result appears in a textbox, where the user can edit the text and add it to the note.
+![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_hand_empty.png)
+![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_hand_photo.png)
+![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_hand_complete.png)
+![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_note_added.png)
+
+Choosing the Tags option lets the user choose and create new tags. There tags will also appear in the filter list in the overview.
+![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_note_addtag.png)
+![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_filter_newtag.png)
+
+Clicking the delete option will open a pop-up that asks for confirmation.
+![note empty](https://github.com/inayrus/FinalAppProject/blob/master/doc/Screenshot_note_delete.png)
 
 
-## Problem statement
-People usually write things down to remember it at a later time. This could be a to do list written on a scrap piece of paper, or an overheard quote typed on a phone. The way we make notes isn’t always consistent, even though we sometimes wish it was. It’s easy to print documents and make digital text physical, but it’s a bit more effort to turn handwritten notes digital. Especially in the case of longer texts, like lecture notes.
+#### Copyright statements
+The Noted app is licenced with the MIT licence by Valerie Sawirja. For more details, see [LICENCE](https://github.com/inayrus/FinalAppProject/blob/master/LICENCE.md).
 
-## Solution
-To solve the problem of having to type the notes to make them digital, this app includes a feature that turns handwritten notes into digital texts with a photo.
+#### Sources of external code
+This app leans on the following code libraries:
+* [The Microsoft Computer Vision API](https://azure.microsoft.com/en-gb/services/cognitive-services/computer-vision/)
+* [The Microsoft Computer Vision API: Android Client Library](https://github.com/microsoft/Cognitive-Vision-Android)
 
-### Features
-These are the main features I would like to implement:
-1. let people create new notes:
-    - can type a note as normal
-    - can upload a photo of text to convert to digital text
-2. possible to edit the note: bold, highlights, text sizes.
-3. delete a note
-4. add tags to a note
-5. sort the notes by tag in the overview
 
-#### Optional Features
-* Camera feature to retrieve make photos of notes
-* A searchbar
-* The sidebar
-* Add tags in sidebar
-* Change layout colours in sidebar
-* A date of creation and of modification on the note
 
-### Sketches
-These sketches don't yet include views of a photo being taken or chosen to convert. The converted note activity does show what it would look like after the photo has been turned to text.
-
-![overview activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/overview_activity_options.png)
-![select photo view](https://github.com/inayrus/FinalAppProject/blob/master/doc/select_photo.png)
-![new note activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/Note_View_Empty.png)
-
-![options](https://github.com/inayrus/FinalAppProject/blob/master/doc/options_view.png)
-![tag activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/tag_activity.png)
-![filled note activity](https://github.com/inayrus/FinalAppProject/blob/master/doc/Note_View_Filled.png)
-
-### Prerequisites
-* External components needed to implement certain features:
-  * SQLite to save the notes.
-  * Microsoft Computer Vision API to convert photos to text.
-* I looked into the FairNote as a similar app, and I like the way they use tags instead of folders, and how it's possible to change the colour layout of the app. They do show quite a big part of the note itself in the listview, which is useful when the notes are short, but not really for long texts.
-* I think the hardest parts of implementing this application will be figuring out how the Microsoft API works. At this moment I think it could also be a challenge to save and seperate the user's notes from the app settings (labels, colour layout preferences).
+V * the application name,
+* a couple of screen shots (resized to appropriate width/height for readability)

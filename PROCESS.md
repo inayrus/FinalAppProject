@@ -139,3 +139,5 @@ Tomorrow I'm planning to make a video, rewrite the readme, and add a license.
 
 #### Day 4
 * Changed the app name and added an icon.
+* Chose a public domain license (MIT licence) for my app. This app is heavily based on note apps that already existed, and it currently is far from perfect. I worked hard on it, but at this moment I feel like I wouldn't mind if other people improved this app, or used my code as a base for their own projects.
+* Wrote the README.
